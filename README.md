@@ -1,4 +1,4 @@
-[Old repo](https://github.com/jacintosuner/old-robot-grasp). 
+[Old repo](https://github.com/jacintosuner/old-robot-grasp)
 
 # Installation
 ## Environment creation and dependencies installation
