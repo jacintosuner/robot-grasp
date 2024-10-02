@@ -1,3 +1,10 @@
+# Installation
+In order to install the module pydensecrf, run the following line of code:
+```bash
+git+https://github.com/lucasb-eyer/pydensecrf.git
+```
+
+
 # python_ml_project_template
 
 This is a template for a Python Machine Learning project with the following features:
