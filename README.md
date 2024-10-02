@@ -5,7 +5,7 @@ git+https://github.com/lucasb-eyer/pydensecrf.git
 ```
 
 
-# python_ml_project_template
+# README from the python_ml_project_template
 
 This is a template for a Python Machine Learning project with the following features:
 
