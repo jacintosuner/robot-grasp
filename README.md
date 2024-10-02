@@ -1,7 +1,17 @@
+[Old repo](https://github.com/jacintosuner/old-robot-grasp). 
+
 # Installation
+## Environment creation and dependencies installation
+```bash
+pip install virtualenv
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
 In order to install the module pydensecrf, run the following line of code:
 ```bash
-git+https://github.com/lucasb-eyer/pydensecrf.git
+pip install git+https://github.com/lucasb-eyer/pydensecrf.git
 ```
 
 
