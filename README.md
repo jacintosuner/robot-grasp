@@ -1,23 +1,6 @@
 [Old repo](https://github.com/jacintosuner/old-robot-grasp)
 
-# Installation
-## Environment creation and dependencies installation
-```bash
-pip install virtualenv
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-In order to install the module pydensecrf, run the following line of code:
-```bash
-pip install git+https://github.com/lucasb-eyer/pydensecrf.git
-```
-
-
-# README from the python_ml_project_template
-
-This is a template for a Python Machine Learning project with the following features:
+This repo follows a template for a Python Machine Learning project with the following features:
 
 * [Weights and Biases](wandb.ai) support, for experiment tracking and visualization
 * [Hydra](https://hydra.cc/) support, for configuration management
@@ -43,10 +26,22 @@ All that needs doing is replacing all occurances of `python_ml_project_template`
 First, we'll need to install platform-specific dependencies for Pytorch. See [here](https://pytorch.org/get-started/locally/) for more details. For example, if we want to use CUDA 11.8 with Pytorch 2.
 
 ```bash
-
-pip install torch==2.0.1 torchvision==0.15.2 --index-url https://download.pytorch.org/whl/cu118/
-
+pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0+cu113 -f https://download.pytorch.org/whl/torch_stable.html
 ```
+
+Make sure to have an environment set up:
+
+```bash
+pip install virtualenv
+python3 -m venv venv
+source venv/bin/activate
+```
+
+In order to install the module pydensecrf, run the following line of code:
+```bash
+pip install git+https://github.com/lucasb-eyer/pydensecrf.git
+```
+
 
 Then, we can install the package itself:
 
