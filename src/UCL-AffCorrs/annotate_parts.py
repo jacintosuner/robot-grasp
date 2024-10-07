@@ -19,12 +19,12 @@ from models.correspondence_functions import (
                                             )
 
 with open("./config/default_config.yaml") as f:
-    args = yaml.load(f, Loader=yaml.CLoader)
+    args = yaml.load(f, Loader=yaml.Loader)
 
 # EXAMPLE_TARGET = "./demos/images/demo_parts/example1/hammer_02_00000001_rgb.jpg"
 # IMDIR = Path("./demos/images/demo_parts/example1")
-EXAMPLE_TARGET = "../images/IMG_1375.jpeg"
-IMDIR = Path("../images/")
+EXAMPLE_TARGET = "../data/images/mug_target.jpeg"
+IMDIR = Path("../data/images/")
 
 LABEL_COLORS = [(255,0,0), (0,255,0), (0,0,255), (255,0,255),
                 (0,125,125), (125,125,0), (200,255,50),

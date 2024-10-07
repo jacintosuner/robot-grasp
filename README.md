@@ -29,6 +29,11 @@ First, we'll need to install platform-specific dependencies for Pytorch. See [he
 pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0+cu113 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
+In this case, we can use the command:
+```bash
+pip3 install torch torchvision torchaudio
+```
+
 Make sure to have an environment set up:
 
 ```bash
