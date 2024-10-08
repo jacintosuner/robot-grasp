@@ -8,7 +8,7 @@ fi
 rgbd_input_path=$1
 mask_reference_path=$2
 filename=$(basename -- "$rgbd_input_path")
-output_directory=~/robot-grasp/src/data/pipeline_results_for_${filename%.*}
+output_directory=~/robot-grasp/data/pipeline_results_for_${filename%.*}
 
 # Create folder with results in it
 echo "Creating folder with pipeline inputs and results..."
@@ -29,7 +29,7 @@ else
 fi
 
 ## Run Affordance Mask
-cd ../src/UCL-AffCorrs/demos
+cd ../third_party/UCL-AffCorrs/demos
 python3 show_part_annotation_correspondence.py --reference_dir_path $mask_reference_path --target_image_path $output_directory/rgb.jpg --output_dir_path $output_directory
 
 # Prepare input for Contact Graspnet
@@ -42,7 +42,7 @@ deactivate
 # Run Contact Graspnet
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate contact_graspnet_env
-cd ~/robot-grasp/src/contact_graspnet
+cd ~/robot-grasp/third_party/contact_graspnet
 python3 contact_graspnet/inference.py --np_path=$output_directory/contact_graspnet_input.npy --local_regions --filter_grasps
 
 
