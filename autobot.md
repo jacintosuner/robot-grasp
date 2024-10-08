@@ -36,13 +36,13 @@
 
     ```bash
     SINGULARITYENV_CUDA_VISIBLE_DEVICES=0 \
-    SINGULARITYENV_WANDB_DOCKER_IMAGE=python-ml-project-template \
+    SINGULARITYENV_WANDB_DOCKER_IMAGE=robot-grasp \
     singularity exec \
     --nv \
     --pwd /opt/$(whoami)/code \
     -B /scratch/$(whoami)/data:/opt/data \
     -B /scratch/$(whoami)/logs:/opt/logs \
-    docker://beisner/python-ml-project-template \
+    docker://beisner/robot-grasp \
     python scripts/train.py \
         dataset.data_dir=/opt/data \
         log_dir=/opt/logs
