@@ -1,3 +1,6 @@
 [submodule "third_party/contact_graspnet"]
 	path = third_party/contact_graspnet
 	url = https://github.com/jacintosuner/contact_graspnet.git
+[submodule "third_party/UCL-AffCorrs"]
+	path = third_party/UCL-AffCorrs
+	url = https://github.com/jacintosuner/UCL-AffCorrs.git
