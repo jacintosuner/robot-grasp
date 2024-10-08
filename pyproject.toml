@@ -83,14 +83,20 @@ dependencies = [
   "tomli == 2.0.2",
   "tomlkit == 0.13.2",
   "tornado == 6.4.1",
+  "torch == 2.4.1",
   "traitlets == 5.14.3",
   "trove-classifiers == 2024.9.12",
   "typing_extensions == 4.12.2",
   "urllib3 == 2.2.3",
   "virtualenv == 20.26.6",
   "wcwidth == 0.2.13",
+  "wandb == 0.18.3",
   "widgetsnbextension == 4.0.13",
   "zipp == 3.20.2",
+  "torchmetrics",
+  "torchvision == 0.19.1",
+  "lightning",
+  "pytorch_lightning",
 ]
 
 [build-system]
