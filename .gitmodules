@@ -1,0 +1,3 @@
+[submodule "third_party/contact_graspnet"]
+	path = third_party/contact_graspnet
+	url = https://github.com/jacintosuner/contact_graspnet.git
