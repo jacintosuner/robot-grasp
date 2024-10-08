@@ -1,5 +1,5 @@
 [project]
-name = "python-ml-project-template"
+name = "robot-grasp"
 version = "0.1.0"
 description = "A Python Package Template"
 readme = "README.md"
@@ -125,7 +125,7 @@ build_docs = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-python_ml_project_template = ["py.typed"]
+robot_grasp = ["py.typed"]
 
 [tool.isort]
 profile = "black"

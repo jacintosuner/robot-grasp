@@ -19,7 +19,7 @@ In addition, it contains all the good features from the original version of this
     * On a Pull Request: install dependencies, run style checks, run Python tests
     * After merge: same a Pull Request, but also deploy the docs site to the projects Github Pages URL!!!!
 
-All that needs doing is replacing all occurances of `python_ml_project_template` and `python-ml-project-template` with the name of your package(including the folder `src/python_ml_project_template`), the rest should work out of the box!
+All that needs doing is replacing all occurances of `robot_grasp` and `robot-grasp` with the name of your package(including the folder `src/robot_grasp`), the rest should work out of the box!
 
 ## Installation
 
@@ -69,7 +69,7 @@ pre-commit install
 To build the docker image, run:
 
 ```bash
-docker build -t <my_dockerhub_username>/python-ml-project-template .
+docker build -t <my_dockerhub_username>/robot-grasp .
 ```
 
 To run the training script locally, run:
@@ -83,8 +83,8 @@ docker run \
     -v $(pwd)/logs:/opt/baeisner/logs \
     --gpus all \
     -e WANDB_API_KEY=$WANDB_API_KEY \
-    -e WANDB_DOCKER_IMAGE=python-ml-project-template \
-    python-ml-project-template python scripts/train.py \
+    -e WANDB_DOCKER_IMAGE=robot-grasp \
+    robot-grasp python scripts/train.py \
         dataset.data_dir=/root/data \
         log_dir=/root/logs
 ```
@@ -92,7 +92,7 @@ docker run \
 To push this:
 
 ```bash
-docker push <my_dockerhub_username>/python-ml-project-template:latest
+docker push <my_dockerhub_username>/robot-grasp:latest
 ```
 
 ## Running on Clusters
