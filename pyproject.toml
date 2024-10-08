@@ -95,6 +95,8 @@ dependencies = [
   "zipp == 3.20.2",
   "torchmetrics",
   "torchvision == 0.19.1",
+  "lightning",
+  "pytorch_lightning",
 ]
 
 [build-system]
