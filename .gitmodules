@@ -4,3 +4,6 @@
 [submodule "third_party/UCL-AffCorrs"]
 	path = third_party/UCL-AffCorrs
 	url = https://github.com/jacintosuner/UCL-AffCorrs.git
+[submodule "third_party/Grounded-SAM-2"]
+	path = third_party/Grounded-SAM-2
+	url = https://github.com/jacintosuner/Grounded-SAM-2.git
