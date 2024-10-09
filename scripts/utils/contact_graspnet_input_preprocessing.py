@@ -13,7 +13,7 @@ def main(directory, bgrd=False):
 
     
     # Affordance data
-    seg_file_path = os.path.join(directory, 'affordance_mask.npy')
+    seg_file_path = os.path.join(directory, 'zeroed_affordance_mask.npy')
     seg_data = np.load(seg_file_path, allow_pickle=True)
 
 

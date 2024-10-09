@@ -32,6 +32,18 @@ fi
 cd ../third_party/UCL-AffCorrs/demos
 python3 show_part_annotation_correspondence.py --reference_dir_path $mask_reference_path --target_image_path $output_directory/rgb.jpg --output_dir_path $output_directory
 
+
+## Zero out the features from the robot
+
+### Run Grounded-SAM-2 on the image
+cd ~/robot-grasp/third_party/Grounded-SAM-2
+python3 grounded_sam2_local_demo.py --text_prompt "robot." --img_path $output_directory/rgb.jpg --output_dir $output_directory
+
+
+### Zero out the features from the robot
+cd ~/robot-grasp/scripts/utils
+python3 zero_out_features.py --affordance_path $output_directory/affordance_mask.npy --zero_out_features $output_directory/grounded_sam_mask.npy --output_dir $output_directory
+
 # Prepare input for Contact Graspnet
 cd ~/robot-grasp/scripts
 python3 utils/contact_graspnet_input_preprocessing.py --data_dir $output_directory --bgrd
