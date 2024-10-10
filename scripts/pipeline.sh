@@ -53,6 +53,19 @@ python3 grounded_sam2_local_demo.py --text_prompt "robot." --img_path $output_di
 cd ~/robot-grasp/scripts/utils
 python3 zero_out_features.py --affordance_path $output_directory/affordance_mask.npy --zero_out_features $output_directory/grounded_sam_seg_robot.json --output_dir $output_directory
 
+
+# ## Prepare input for AnyGrasp
+# cd ~/robot-grasp/scripts
+# python3 utils/anygrasp_input_preprocessing.py --data_dir $output_directory --bgrd
+
+
+
+
+
+
+
+
+
 # # Prepare input for Contact Graspnet
 cd ~/robot-grasp/scripts
 python3 utils/contact_graspnet_input_preprocessing.py --data_dir $output_directory --bgrd
