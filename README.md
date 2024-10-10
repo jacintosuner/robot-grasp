@@ -1,3 +1,8 @@
+## Installation
+TODO
+(install venv environment, install conda_graspnet_env, get troubleshooting commands from the previous PRs,...)
+
+
 [Old repo](https://github.com/jacintosuner/old-robot-grasp)
 
 This repo follows a template for a Python Machine Learning project with the following features:

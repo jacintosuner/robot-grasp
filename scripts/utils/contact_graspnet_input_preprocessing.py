@@ -1,6 +1,8 @@
 import argparse
 import numpy as np
 import os
+import json
+from PIL import Image
 
 def main(directory, bgrd=False):
     camera_matrix = np.array([[613.32427146,  0.,        633.94909346],
@@ -12,9 +14,25 @@ def main(directory, bgrd=False):
     data = np.load(file_path, allow_pickle=True)
 
     
-    # Affordance data
-    seg_file_path = os.path.join(directory, 'zeroed_affordance_mask.npy')
-    seg_data = np.load(seg_file_path, allow_pickle=True)
+    # Load the affordance mask bounding box from the JSON file
+    affordance_mask_path = os.path.join(directory, 'affordance_mask.npy')
+    affordance_mask = np.load(affordance_mask_path)
+    json_file_path = os.path.join(directory, 'grounded_sam_seg_mug.json')
+    with open(json_file_path, 'r') as f:
+        json_data = json.load(f)
+
+    # Extract bounding box coordinates
+    x1, y1, x2, y2 = map(int, json_data['annotations'][0]['bbox'])
+
+    # Load the affordance mask from the .npy file
+    affordance_mask_path = os.path.join(directory, 'affordance_mask.npy')
+    affordance_mask = np.load(affordance_mask_path)
+
+    # Create an empty segmentation mask with the same size as the original image
+    seg_data = np.zeros((data.shape[0], data.shape[1]), dtype=np.uint8)
+
+    # Place the affordance mask within the bounding box in the segmentation mask
+    seg_data[y1:y2, x1:x2] = np.array(affordance_mask)
 
 
     # Transform the data into a dictionary
@@ -25,6 +43,22 @@ def main(directory, bgrd=False):
         'K': camera_matrix,  # Camera matrix
         'seg': seg_data
     }
+
+    import matplotlib.pyplot as plt
+
+    # Overlay the segmentation mask on the RGB image
+    rgb_image = transformed_data['rgb']
+    seg_mask = np.zeros_like(rgb_image)
+    seg_mask[:, :, 0] = seg_data * 255  # Red channel for segmentation mask
+
+    # Blend the RGB image and the segmentation mask
+    blended_image = np.clip(rgb_image + seg_mask, 0, 255).astype(np.uint8)
+
+    # Plot the blended image using matplotlib
+    plt.imshow(blended_image)
+    plt.title('Segmentation Overlay on RGB Image')
+    plt.axis('off')  # Hide axes
+    plt.show()
 
     # Save the processed data
     print('Saving the processed data for Contact Graspnet...')
