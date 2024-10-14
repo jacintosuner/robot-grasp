@@ -25,11 +25,10 @@ def capture_rgbd(dir_path, to_npy):
             
             if to_npy:
                 # Resize depth image to match RGB image dimensions
-                rgb_image = capture.color
                 
                 # Prepare data dictionary
                 data_dict = {
-                    "rgb": rgb_image,
+                    "rgb": capture.color[:, :, :3][:, :, ::-1],  # Convert BGR to RGB
                     "depth": capture.transformed_depth,
                     "K": k4a.calibration.get_camera_matrix(CalibrationType.DEPTH)
                 }
