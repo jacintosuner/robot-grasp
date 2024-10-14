@@ -1,0 +1,25 @@
+{
+    "image_path": "/home/jacinto/robot-grasp/data/pipeline_results_for_robot_and_cup/rgb.jpg",
+    "annotations": [
+        {
+            "class_name": "mug",
+            "bbox": [
+                568.25732421875,
+                499.8904113769531,
+                663.249755859375,
+                592.7767944335938
+            ],
+            "segmentation": {
+                "size": [
+                    720,
+                    1280
+                ],
+                "counts": "gb`<;ne0:L3M3L4M4L5K:F;F5J7J2M3N2N1O1O100O1000O10000O2N2O0O00101N1O001O00100O001O1O1O1O1O1O1O1O1N2O1O2N001O1N2O0000O01000O01O10O0100O001O10O0001N101OO01N3M2M3H8L5ON2I700010O1O2N1O1O2N1O2M3M4L5K:Cfc`="
+            },
+            "score": 0.94921875
+        }
+    ],
+    "box_format": "xyxy",
+    "img_width": 1280,
+    "img_height": 720
+}
