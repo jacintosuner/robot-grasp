@@ -1,20 +1,24 @@
 #!/bin/bash
 
+# Examples:
+# cd scripts
+# ./pipeline.sh ~/robot-grasp/data/rgbdks/red_mug.npy ~/robot-grasp/data/mask_references/mug_reference
+
 if [ -z "$1" ]; then
   echo "Error: No input path provided."
   exit 1
 fi
 
-rgbd_input_path=$1
+rgbdk_input_path=$1
 mask_reference_path=$2
-filename=$(basename -- "$rgbd_input_path")
+filename=$(basename -- "$rgbdk_input_path")
 output_directory=~/robot-grasp/data/pipeline_results_for_${filename%.*}
 
 # Create folder with results in it
 echo "Creating folder with pipeline inputs and results..."
 mkdir -p $output_directory
 
-cp "$rgbd_input_path" "$output_directory/rgbd.npy"
+cp "$rgbdk_input_path" "$output_directory/rgbdk.npy"
 
 
 # Find affordance mask
@@ -23,9 +27,9 @@ source ../venv/bin/activate
 
 ## Get rgb from rbgd / bgrd
 if [[ " $@ " =~ " --bgrd " ]]; then
-    python3 utils/rgdb_to_rgb.py --input_path "$output_directory/rgbd.npy" --output_path $output_directory --bgrd
+    python3 utils/rgbdk_to_rgb.py --input_path "$output_directory/rgbdk.npy" --output_path $output_directory --bgrd
 else
-    python3 utils/rgdb_to_rgb.py --input_path "$output_directory/rgbd.npy" --output_path $output_directory
+    python3 utils/rgbdk_to_rgb.py --input_path "$output_directory/rgbdk.npy" --output_path $output_directory
 fi
 
 ### Run Segmentation on the image to find where the mug is
