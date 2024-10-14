@@ -26,17 +26,13 @@ cp "$rgbdk_input_path" "$output_directory/rgbdk.npy"
 source ../venv/bin/activate
 
 ## Get rgb from rbgd / bgrd
-if [[ " $@ " =~ " --bgrd " ]]; then
-    python3 utils/rgbdk_to_rgb.py --input_path "$output_directory/rgbdk.npy" --output_path $output_directory --bgrd
-else
-    python3 utils/rgbdk_to_rgb.py --input_path "$output_directory/rgbdk.npy" --output_path $output_directory
-fi
+python3 utils/rgbdk_to_rgb.py --input_path "$output_directory/rgbdk.npy" --output_path $output_directory
 
 ### Run Segmentation on the image to find where the mug is
 cd ~/robot-grasp/third_party/Grounded-SAM-2
 python3 grounded_sam2_local_demo.py --text_prompt "mug." --img_path $output_directory/rgb.jpg --output_dir $output_directory 
 
-### Create an image only with the segmented object within the bounding box
+# ### Create an image only with the segmented object within the bounding box
 cd ~/robot-grasp/scripts
 python3 utils/create_image_with_segmented_object.py --input_path $output_directory/rgb.jpg --segmentation_path $output_directory/grounded_sam_seg_mug.json --output_path $output_directory/seg_mug.jpg
 
@@ -63,16 +59,9 @@ python3 zero_out_features.py --affordance_path $output_directory/affordance_mask
 # python3 utils/anygrasp_input_preprocessing.py --data_dir $output_directory --bgrd
 
 
-
-
-
-
-
-
-
 # # Prepare input for Contact Graspnet
 cd ~/robot-grasp/scripts
-python3 utils/contact_graspnet_input_preprocessing.py --data_dir $output_directory --bgrd
+python3 utils/contact_graspnet_input_preprocessing.py --data_dir $output_directory
 
 deactivate
 

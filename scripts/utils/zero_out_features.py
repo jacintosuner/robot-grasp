@@ -27,6 +27,24 @@ def zero_out_features(affordance_path, to_zero_out_path, output_dir):
     np.save(output_path, affordance_mask)
     print(f"Zeroed affordance mask saved to {output_path}")
 
+    import matplotlib.pyplot as plt
+
+    # Plot the initial affordance mask
+    plt.figure(figsize=(10, 5))
+
+    plt.subplot(1, 2, 1)
+    plt.title('Initial Affordance Mask')
+    plt.imshow(np.load(affordance_path), cmap='gray')
+    plt.axis('off')
+
+    # Plot the zeroed affordance mask
+    plt.subplot(1, 2, 2)
+    plt.title('Zeroed Affordance Mask')
+    plt.imshow(affordance_mask, cmap='gray')
+    plt.axis('off')
+
+    plt.show()
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Zero out features from the affordance mask.')
     parser.add_argument('--affordance_path', type=str, required=True, help='Path to the affordance mask file.')
