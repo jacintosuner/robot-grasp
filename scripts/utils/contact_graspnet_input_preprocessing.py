@@ -3,6 +3,7 @@ import numpy as np
 import os
 import json
 from PIL import Image
+from pycocotools import mask as maskUtils
 
 def main(directory):
     # RBGD data
@@ -20,18 +21,21 @@ def main(directory):
     # Extract bounding box coordinates
     x1, y1, x2, y2 = map(int, json_data['annotations'][0]['bbox'])
 
-    # Load the affordance mask from the .npy file
+    # Extract segmentation mask from RLE
+    # rle = json_data['annotations'][0]['segmentation']
+    # seg_data = maskUtils.decode(rle)
+
+    # # Load the affordance mask from the .npy file
     affordance_mask_path = os.path.join(directory, 'affordance_mask.npy')
     affordance_mask = np.load(affordance_mask_path)
 
     # Transform the data into a dictionary and add the segmentation mask
     data_dict = {key: data.item().get(key) for key in data.item().keys()}
     
-    # Create an empty segmentation mask with the same size as the original image
+    # # Create an empty segmentation mask with the same size as the original image
     seg_data = np.zeros((data_dict['rgb'].shape[0], data_dict['rgb'].shape[1]), dtype=np.uint8)
 
     # Place the affordance mask within the bounding box in the segmentation mask
-    print(seg_data.shape)
     seg_data[y1:y2, x1:x2] = np.array(affordance_mask)
 
     data_dict['seg'] = seg_data
