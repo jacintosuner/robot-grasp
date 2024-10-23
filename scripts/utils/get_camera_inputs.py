@@ -5,6 +5,9 @@ from pyk4a import PyK4A, Config
 from pyk4a.calibration import CalibrationType
 import cv2  # Ensure you have OpenCV installed for resizing
 
+# Use
+# python get_camera_inputs.py --dir_path ../../data/rgbdks/ --to_npy
+# rsync -r --progress ./robot-grasp/data/rgbdks/rgbdk_data.npy jacinto@ham1.pc.cs.cmu.edu:/home/jacinto/robot-grasp/data/rgbdks
 
 def capture_rgbd(dir_path, to_npy):
     # Create a dir_path if it doesn't exist
@@ -59,7 +62,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description='Capture RGBD data using Azure Kinect.')
-    parser.add_argument('dir_path', type=str, help='Directory to save RGBD data')
+    parser.add_argument('--dir_path', type=str, help='Directory to save RGBD data')
     parser.add_argument('--to_npy', action='store_true', help='Save RGB and Depth data as a single .npy file')
 
     args = parser.parse_args()
