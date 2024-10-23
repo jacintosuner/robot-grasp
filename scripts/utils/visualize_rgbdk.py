@@ -1,45 +1,72 @@
 import numpy as np
-import cv2
 import matplotlib.pyplot as plt
 
-def visualize_rgbdk(output_data):
-    rgb_data = output_data['rgb']
-    depth_data = output_data['depth']
-    camera_matrix = output_data['K']
+def visualize_point_cloud(bgr_image, depth_image, camera_matrix):
+    # Get the height and width of the images
+    height, width, _ = bgr_image.shape
 
-    # Display RGB image
-    plt.figure(figsize=(10, 5))
-    plt.subplot(1, 2, 1)
-    plt.imshow(cv2.cvtColor(rgb_data, cv2.COLOR_BGR2RGB))
-    plt.title('RGB Image')
-    plt.axis('off')
+    # Create a meshgrid for pixel coordinates
+    x, y = np.meshgrid(np.arange(width), np.arange(height))
 
-    # Display Depth image
-    plt.subplot(1, 2, 2)
-    plt.imshow(depth_data, cmap='gray')
-    plt.title('Depth Image')
-    plt.axis('off')
+    # Flatten the coordinates and depth image
+    x = x.flatten()
+    y = y.flatten()
+    depth = depth_image.flatten()
+
+    # Filter out points with zero depth
+    valid = depth > 0
+    x_valid = x[valid]
+    y_valid = y[valid]
+    depth_valid = depth[valid]
+
+    # Convert depth to meters for visualization
+    depth_meters = depth_valid / 1000.0  # if depth is in mm
+
+    # Use camera matrix to get 3D coordinates
+    fx = camera_matrix[0, 0]
+    fy = camera_matrix[1, 1]
+    cx = camera_matrix[0, 2]
+    cy = camera_matrix[1, 2]
+
+    # Compute 3D points in camera coordinates
+    X = (x_valid - cx) * depth_meters / fx
+    Y = (y_valid - cy) * depth_meters / fy
+    Z = depth_meters
+
+    # Stack the 3D points
+    points = np.vstack((X, Y, Z)).T
+
+    # Get color values from the BGR image (invert the channels for RGB)
+    colors = bgr_image[y_valid, x_valid] / 255.0  # Normalize to [0, 1]
+
+    # Create a 3D scatter plot
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+
+    # Plot the point cloud
+    ax.scatter(X, Y, Z, c=colors, s=0.1)  # You can adjust the point size
+
+    # Set labels
+    ax.set_xlabel('X (meters)')
+    ax.set_ylabel('Y (meters)')
+    ax.set_zlabel('Z (meters)')
+
+    # Set the aspect ratio
+    ax.set_box_aspect([1, 1, 1])  # Equal aspect ratio
+
+    # Plot the camera position as a point (optional)
+    ax.scatter(0, 0, 0, c='r', marker='o', s=100)  # Camera reference point
 
     plt.show()
 
-    # Print Camera Matrix
-    print("Camera Matrix (K):")
-    print(camera_matrix)
-
 # Example usage
 if __name__ == "__main__":
-    # Load data from npy file
-    data_path = '/home/jacinto/robot-grasp/data/rgbdks/rgbdk_data.npy'
-    loaded_data = np.load(data_path, allow_pickle=True).item()
+    # Load your data
+    input_npy_path = "/home/jacinto/robot-grasp/data/rgbds/processed_data.npy"
+    data_dict = np.load(input_npy_path, allow_pickle=True).item()
 
-    rgb_data = loaded_data['rgb']
-    depth_data = loaded_data['depth']
-    camera_matrix = loaded_data['K']
+    bgr_image = data_dict["bgr"]
+    depth_image = data_dict["depth"]
+    camera_matrix = data_dict["K"]
 
-    output_data = {
-        'rgb': rgb_data,
-        'depth': depth_data,
-        'K': camera_matrix
-    }
-
-    visualize_rgbdk(output_data)
+    visualize_point_cloud(bgr_image, depth_image, camera_matrix)
