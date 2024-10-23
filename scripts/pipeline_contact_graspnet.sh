@@ -2,27 +2,45 @@
 
 # Examples:
 # cd scripts
-# ./pipeline_contact_graspnet.sh ~/robot-grasp/data/rgbdks/red_mug.npy ~/robot-grasp/data/mask_references/mug_reference
+# ./pipeline_contact_graspnet.sh --rgbdk_path ~/robot-grasp/data/rgbdks/red_mug.npy --mask_reference_path ~/robot-grasp/data/mask_references/mug_reference
+# ./pipeline_contact_graspnet.sh --mask_reference_path ~/robot-grasp/data/mask_references/mug_reference
 
-if [ -z "$1" ]; then
-  echo "Error: No input path provided."
+
+# Creating folder with results
+echo "Creating folder with pipeline inputs and results..."
+output_directory=~/robot-grasp/data/contact_graspnet_pipeline_results
+mkdir -p $output_directory
+
+
+
+# Parse arguments
+echo "Parsing arguments..."
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --rgbdk_path) rgbdk_input_path="$2"; shift ;;
+    --mask_reference_path) mask_reference_path="$2"; shift ;;
+    *) echo "Unknown parameter passed: $1"; exit 1 ;;
+  esac
+  shift
+done
+
+if [ -z "$mask_reference_path" ]; then
+  echo "Error: --mask_reference_path not provided."
   exit 1
 fi
 
-rgbdk_input_path=$1
-mask_reference_path=$2
-filename=$(basename -- "$rgbdk_input_path")
-output_directory=~/robot-grasp/data/contact_graspnet_pipeline_results_for_${filename%.*}
+if [ -z "$rgbdk_input_path" ]; then
+  echo "No --rgbdk_path provided. Capturing RGBDK data."
+  cd ~/robot-grasp/scripts
+  python3 utils/capture_rgbdk.py --output_path $output_directory/rgbdk.npy
+else
+  echo "Using provided --rgbdk_path."
+  cp $rgbdk_input_path $output_directory/rgbdk.npy
+fi
 
-# Create folder with results in it
-echo "Creating folder with pipeline inputs and results..."
-mkdir -p $output_directory
-
-cp "$rgbdk_input_path" "$output_directory/rgbdk.npy"
-
-
+exit 0
 # Find affordance mask
-
+# Activate virtual environment for the first part of the pipeline
 source ../venv/bin/activate
 
 ## Get rgb from rbgd / bgrd
