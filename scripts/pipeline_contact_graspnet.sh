@@ -38,22 +38,25 @@ else
   cp $rgbdk_input_path $output_directory/rgbdk.npy
 fi
 
-exit 0
+
 # Find affordance mask
 # Activate virtual environment for the first part of the pipeline
-source ../venv/bin/activate
+echo "Activating virtual environment..."
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate main_env
 
 ## Get rgb from rbgd / bgrd
 python3 utils/rgbdk_to_rgb.py --input_path "$output_directory/rgbdk.npy" --output_path $output_directory
 
 ### Run Segmentation on the image to find where the mug is
+echo "Running segmentation on the image..."
 cd ~/robot-grasp/third_party/Grounded-SAM-2
 python3 grounded_sam2_local_demo.py --text_prompt "mug." --img_path $output_directory/rgb.jpg --output_dir $output_directory 
 
 # ### Create an image only with the segmented object within the bounding box
+echo "Creating an image only with the segmented object within the bounding box..."
 cd ~/robot-grasp/scripts
 python3 utils/create_image_with_segmented_object.py --input_path $output_directory/rgb.jpg --segmentation_path $output_directory/grounded_sam_seg_mug.json --output_path $output_directory/seg_mug.jpg
-
 
 ## Run Affordance Mask
 cd ../third_party/UCL-AffCorrs/demos
@@ -61,7 +64,6 @@ python3 show_part_annotation_correspondence.py --reference_dir_path $mask_refere
 
 
 ## Zero out the features from the robot
-
 ### Run Grounded-SAM-2 on the image
 cd ~/robot-grasp/third_party/Grounded-SAM-2
 python3 grounded_sam2_local_demo.py --text_prompt "robot." --img_path $output_directory/seg_mug.jpg --output_dir $output_directory
@@ -81,10 +83,9 @@ python3 zero_out_features.py --affordance_path $output_directory/affordance_mask
 cd ~/robot-grasp/scripts
 python3 utils/contact_graspnet_input_preprocessing.py --data_dir $output_directory
 
-deactivate
+conda deactivate
 
 # # Run Contact Graspnet
-source ~/miniconda3/etc/profile.d/conda.sh
 conda activate contact_graspnet_env
 cd ~/robot-grasp/third_party/contact_graspnet
 python3 contact_graspnet/inference.py --np_path=$output_directory/contact_graspnet_input.npy --local_regions --filter_grasps --results_path=$output_directory
