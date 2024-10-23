@@ -1,7 +1,5 @@
 ## Installation
-TODO
-(install venv environment, install conda_graspnet_env, get troubleshooting commands from the previous PRs,...)
-
+Install conda environments available in the directory configs/conda_envs using the command conda env create -f environment_name.yml
 
 [Old repo](https://github.com/jacintosuner/old-robot-grasp)
 
