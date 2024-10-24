@@ -1,5 +1,16 @@
 ## Installation
-Install conda environments available in the directory configs/conda_envs using the command conda env create -f environment_name.yml
+Install conda environments available in the directory configs/conda_envs using the command conda env create -f environment_name.yml.
+Get submodules files by doing `git submodule init` and `git submodule update`.
+For Contact Graspnet:
+* Make sure to download the checkpoints.
+* Recompile pointnet2 tf_ops: `sh compile_pointnet_tfops.sh`
+For Anygrasp:
+* Follow the steps provided in its github repository for downloading pointnet.
+For Grounded-SAM-2:
+* Get SAM 2 checkpoints: `cd checkpoints`, `bash download_ckpts.sh`
+* Get Grounding DINO checkpoints: `cd gdino_checkpoints`, `bash download_ckpts.sh`
+For AffCorrs:
+* install pydensecrf doing: `pip install git+https://github.com/lucasb-eyer/pydensecrf.git`
 
 [Old repo](https://github.com/jacintosuner/old-robot-grasp)
 
