@@ -2,7 +2,7 @@
 
 # Examples:
 # cd scripts
-# ./pipeline_contact_graspnet.sh --rgbdk_path ~/robot-grasp/data/rgbdks/red_mug.npy --mask_reference_path ~/robot-grasp/data/mask_references/mug_reference
+# ./pipeline_contact_graspnet.sh --rgbdk_path ~/robot-grasp/data/rgbdks/rgbdk.npy --mask_reference_path ~/robot-grasp/data/mask_references/mug_reference
 # ./pipeline_contact_graspnet.sh --mask_reference_path ~/robot-grasp/data/mask_references/mug_reference
 
 

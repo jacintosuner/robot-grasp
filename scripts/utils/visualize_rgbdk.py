@@ -1,72 +1,51 @@
+import os
+import argparse
 import numpy as np
-import matplotlib.pyplot as plt
+import open3d as o3d
+from PIL import Image
 
-def visualize_point_cloud(bgr_image, depth_image, camera_matrix):
-    # Get the height and width of the images
-    height, width, _ = bgr_image.shape
+parser = argparse.ArgumentParser()
+parser.add_argument('rgbdk_file_paths', nargs='+', help='Paths to the RGB-D + K (camera matrix) data files')
+parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+cfgs = parser.parse_args()
 
-    # Create a meshgrid for pixel coordinates
-    x, y = np.meshgrid(np.arange(width), np.arange(height))
+def visualize_rgbdk(rgbdk_file_paths):
+    combined_pcd = o3d.geometry.PointCloud()
 
-    # Flatten the coordinates and depth image
-    x = x.flatten()
-    y = y.flatten()
-    depth = depth_image.flatten()
+    for rgbdk_file_path in rgbdk_file_paths:
+        # Load the RGB-DK numpy file
+        data = np.load(rgbdk_file_path, allow_pickle=True)
+        colors = np.array(data.item().get('rgb'), dtype=np.float32) / 255.0
+        depths = np.array(data.item().get('depth')) / 1000.0
+        fx, fy = data.item().get('K')[0, 0], data.item().get('K')[1, 1]
+        cx, cy = data.item().get('K')[0, 2], data.item().get('K')[1, 2]
 
-    # Filter out points with zero depth
-    valid = depth > 0
-    x_valid = x[valid]
-    y_valid = y[valid]
-    depth_valid = depth[valid]
+        # get point cloud
+        scale = 1000.0
+        xmap, ymap = np.arange(depths.shape[1]), np.arange(depths.shape[0])
+        xmap, ymap = np.meshgrid(xmap, ymap)
+        points_z = depths / scale
+        points_x = (xmap - cx) / fx * points_z
+        points_y = (ymap - cy) / fy * points_z
 
-    # Convert depth to meters for visualization
-    depth_meters = depth_valid / 1000.0  # if depth is in mm
+        # set your workspace to crop point cloud
+        mask = (points_z > 0) & (points_z < 1)
+        points = np.stack([points_x, points_y, points_z], axis=-1)
+        points = points[mask].astype(np.float32)
+        colors = colors[mask].astype(np.float32)
 
-    # Use camera matrix to get 3D coordinates
-    fx = camera_matrix[0, 0]
-    fy = camera_matrix[1, 1]
-    cx = camera_matrix[0, 2]
-    cy = camera_matrix[1, 2]
+        # Create Open3D point cloud
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(points)
+        pcd.colors = o3d.utility.Vector3dVector(colors)
+        trans_mat = np.array([[1,0,0,0],[0,1,0,0],[0,0,-1,0],[0,0,0,1]])
+        pcd.transform(trans_mat)
 
-    # Compute 3D points in camera coordinates
-    X = (x_valid - cx) * depth_meters / fx
-    Y = (y_valid - cy) * depth_meters / fy
-    Z = depth_meters
+        # Combine point clouds
+        combined_pcd += pcd
 
-    # Stack the 3D points
-    points = np.vstack((X, Y, Z)).T
+    # visualization
+    o3d.visualization.draw_geometries([combined_pcd])
 
-    # Get color values from the BGR image (invert the channels for RGB)
-    colors = bgr_image[y_valid, x_valid] / 255.0  # Normalize to [0, 1]
-
-    # Create a 3D scatter plot
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-
-    # Plot the point cloud
-    ax.scatter(X, Y, Z, c=colors, s=0.1)  # You can adjust the point size
-
-    # Set labels
-    ax.set_xlabel('X (meters)')
-    ax.set_ylabel('Y (meters)')
-    ax.set_zlabel('Z (meters)')
-
-    # Set the aspect ratio
-    ax.set_box_aspect([1, 1, 1])  # Equal aspect ratio
-
-    # Plot the camera position as a point (optional)
-    ax.scatter(0, 0, 0, c='r', marker='o', s=100)  # Camera reference point
-
-    plt.show()
-
-# Example usage
-if __name__ == "__main__":
-    # Load your data
-    input_npy_path = "/home/jacinto/robot-grasp/data/rgbds/processed_data.npy"
-    data_dict = np.load(input_npy_path, allow_pickle=True).item()
-
-    bgr_image = data_dict["bgr"]
-    depth_image = data_dict["depth"]
-    camera_matrix = data_dict["K"]
-
-    visualize_point_cloud(bgr_image, depth_image, camera_matrix)
+if __name__ == '__main__':
+    visualize_rgbdk(cfgs.rgbdk_file_paths)

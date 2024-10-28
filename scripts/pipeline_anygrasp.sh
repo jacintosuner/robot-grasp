@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# example: ./pipeline_anygrasp.sh /home/jacinto/robot-grasp/data/rgbdks/any_grasp_example.npy
+# example: ./pipeline_anygrasp.sh /home/jacinto/robot-grasp/data/rgbdks/rgbdk.npy
 
 
 export CUDA_HOME=/usr/local/cuda-11.7
