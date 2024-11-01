@@ -82,8 +82,6 @@ dependencies:
   - nbformat=5.7.0
   - ncurses=6.4
   - nettle=3.7.3
-  - ninja=1.10.2
-  - ninja-base=1.10.2
   - nomkl=2.0
   - notebook=6.5.2
   - notebook-shim=0.2.2
@@ -101,7 +99,7 @@ dependencies:
   - psutil=5.9.0
   - ptyprocess=0.7.0
   - pycparser=2.21
-  - python=3.7.12
+  - python=3.10.12
   - python-fastjsonschema=2.16.2
   - pytorch=1.9.0
   - pyzmq=23.2.0
@@ -167,7 +165,6 @@ dependencies:
       - kiwisolver==1.4.5
       - markupsafe==2.1.5
       - matplotlib==3.5.3
-      - minkowskiengine==0.5.4
       - multiprocess==0.70.15
       - nest-asyncio==1.6.0
       - networkx==2.6.3
@@ -179,7 +176,6 @@ dependencies:
       - parso==0.8.4
       - pexpect==4.9.0
       - plotly==5.18.0
-      - pointnet2==0.0.0 # check anygrasp repository for installing this package: cd pointneet2; python setup.py install
       - prompt-toolkit==3.0.48
       - pygments==2.17.2
       - pyparsing==3.1.4

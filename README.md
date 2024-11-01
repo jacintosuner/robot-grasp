@@ -1,19 +1,57 @@
-## Installation
-Install conda environments available in the directory configs/conda_envs using the command conda env create -f environment_name.yml.
-Get submodules files by doing `git submodule init` and `git submodule update`.
-For Contact Graspnet:
-* Make sure to download the checkpoints.
-* Recompile pointnet2 tf_ops: `sh compile_pointnet_tfops.sh`
+# Installation
+## Frankarm / Frankapy connection and installation
+In order to setup frankarm connection:
+* Connect the ethernet cable to your desk, and change IPv4 Method to "Shared to other computers".
+* Follow the instructions from frankapy's repo section "Configuring the network with the Control PC", including the IP Address setup for communication through a router (for some reason, setting both network configurations to Automatic doesn't work).
+
+
+Follow installation steps for ROS1: https://robostack.github.io/GettingStarted.html#__tabbed_1_1
+What worked for us:
+``` bash
+mamba create -n ros_noetic python=3.8 ros-noetic-ros-base ros-noetic-franka-gripper -c robostack -c conda-forge
+```
+
+Install catkin tools: `sudo pip3 install -U catkin_tools`
+
+
+For more information, checkout this [Frankapy fork](https://github.com/jacintosuner/frankapy).
+
+
+## Install k4a (for Ubuntu 22.04)
+```bash
+sudo apt-add-repository -y -n 'deb http://archive.ubuntu.com/ubuntu focal main'
+sudo apt-add-repository -y 'deb http://archive.ubuntu.com/ubuntu focal universe'
+sudo apt-get install -y libsoundio1
+sudo apt-add-repository -r -y -n 'deb http://archive.ubuntu.com/ubuntu focal universe'
+sudo apt-add-repository -r -y 'deb http://archive.ubuntu.com/ubuntu focal main'
+
+wget "https://packages.microsoft.com/ubuntu/18.04/prod/pool/main/k/k4a-tools/k4a-tools_1.4.1_amd64.deb"
+wget "https://packages.microsoft.com/ubuntu/18.04/prod/pool/main/libk/libk4a1.4/libk4a1.4_1.4.1_amd64.deb"
+wget "https://packages.microsoft.com/ubuntu/18.04/prod/pool/main/libk/libk4a1.4-dev/libk4a1.4-dev_1.4.1_amd64.deb"
+
+
+sudo dpkg -i libk4a1.4-dev_1.4.1_amd64.deb
+sudo dpkg -i libk4a1.4_1.4.1_amd64.deb
+sudo dpkg -i k4a-tools_1.4.1_amd64.deb
+
+git clone https://github.com/microsoft/Azure-Kinect-Sensor-SDK.git
+cd Azure-Kinect-Sensor-SDK
+sudo cp scripts/99-k4a.rules /etc/udev/rules.d/
+
+# disconnect and connect the camera again
+k4aviewer
+```
+
+## Final build
+Run `scripts/installation.sh`
 For Anygrasp:
 * Follow the steps provided in its github repository for downloading pointnet.
-For Grounded-SAM-2:
-* Get SAM 2 checkpoints: `cd checkpoints`, `bash download_ckpts.sh`
-* Get Grounding DINO checkpoints: `cd gdino_checkpoints`, `bash download_ckpts.sh`
-For AffCorrs:
-* install pydensecrf doing: `pip install git+https://github.com/lucasb-eyer/pydensecrf.git`
 
+
+## Old Repo
 [Old repo](https://github.com/jacintosuner/old-robot-grasp)
 
+## Repo from which this one comes from
 This repo follows a template for a Python Machine Learning project with the following features:
 
 * [Weights and Biases](wandb.ai) support, for experiment tracking and visualization
