@@ -10,3 +10,6 @@
 [submodule "third_party/anygrasp_sdk"]
 	path = third_party/anygrasp_sdk
 	url = https://github.com/jacintosuner/anygrasp_sdk.git
+[submodule "third_party/frankapy"]
+	path = third_party/frankapy
+	url = https://github.com/jacintosuner/frankapy
