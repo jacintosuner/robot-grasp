@@ -46,6 +46,8 @@ k4aviewer
 Run `scripts/installation.sh`
 For Anygrasp:
 * Follow the steps provided in its github repository for downloading pointnet.
+For Contact Graspnet:
+* If pip issues arise during the creation of the conda environment contact_graspnet_env, try unsetting the variable PYTHONPATH: `unset PYTHONPATH`
 
 
 ## Old Repo

@@ -63,7 +63,7 @@ cd ../third_party/UCL-AffCorrs/demos
 python3 show_part_annotation_correspondence.py --reference_dir_path $mask_reference_path --target_image_path $output_directory/seg_mug.jpg --output_dir_path $output_directory
 
 
-## Zero out the features from the robot
+# Zero out the features from the robot
 ### Run Grounded-SAM-2 on the image
 cd ~/robot-grasp/third_party/Grounded-SAM-2
 python3 grounded_sam2_local_demo.py --text_prompt "robot." --img_path $output_directory/seg_mug.jpg --output_dir $output_directory
@@ -89,7 +89,12 @@ conda deactivate
 conda activate contact_graspnet_env
 cd ~/robot-grasp/third_party/contact_graspnet
 python3 contact_graspnet/inference.py --np_path=$output_directory/contact_graspnet_input.npy --local_regions --filter_grasps --results_path=$output_directory
+conda deactivate
 
-# Execute the grasp on the robot
-cd ~/robot-grasp/scripts/utils
-python execute_contact_graspnet_grasps.py --grasps_file_path $output_directory/contact_graspnet_results.npz
+# # Execute the grasp on the robot
+conda activate ros_noetic
+cd ~/robot-grasp/third_party/frankapy
+bash ./bash_scripts/start_control_pc.sh -i iam-dopey
+source catkin_ws/devel/setup.bash
+python ~/robot-grasp/third_party/frankapy/scripts/reset_arm.py
+# python execute_contact_graspnet_grasps.py --grasps_file_path $output_directory/contact_graspnet_results.npz
