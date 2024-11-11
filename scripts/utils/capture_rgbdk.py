@@ -7,6 +7,7 @@ import cv2  # Ensure you have OpenCV installed for resizing
 
 # Use
 # python3 capture_rgbdk.py --output_path ../../data/rgbdks/
+# python3 capture_rgbdk.py --output_path ../../data/rgbdks/ --to_images
 # rsync -r --progress ~/robot-grasp/data/rgbdks/rgbdk.npy jacinto@ham1.pc.cs.cmu.edu:/home/jacinto/robot-grasp/data/rgbdks
 
 def capture_rgbd(output_path, to_images):
@@ -28,11 +29,11 @@ def capture_rgbd(output_path, to_images):
             
             if to_images:
                 # Save RGB and Depth images as PNG files
-                rgb_path = os.path.join(output_path, "bgr_frame.png")
+                rgb_path = os.path.join(output_path, "rgb_frame.png")
                 depth_path = os.path.join(output_path, "depth_frame.png")
 
                 # Save images
-                imageio.imwrite(rgb_path, capture.color)
+                imageio.imwrite(rgb_path, capture.color[:, :, :3][:, :, ::-1])
                 imageio.imwrite(depth_path, depth_image)
 
                 print(f"Saved RGB image to {rgb_path}")

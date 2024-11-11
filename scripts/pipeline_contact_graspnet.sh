@@ -11,6 +11,10 @@ echo "Creating folder with pipeline inputs and results..."
 output_directory=~/robot-grasp/data/contact_graspnet_pipeline_results
 mkdir -p $output_directory
 
+# Activate virtual environment for the first part of the pipeline
+echo "Activating virtual environment..."
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate main_env
 
 
 # Parse arguments
@@ -32,7 +36,7 @@ fi
 if [ -z "$rgbdk_input_path" ]; then
   echo "No --rgbdk_path provided. Capturing RGBDK data."
   cd ~/robot-grasp/scripts
-  python3 utils/capture_rgbdk.py --output_path $output_directory/rgbdk.npy
+  python3 utils/capture_rgbdk.py --output_path $output_directory
 else
   echo "Using provided --rgbdk_path."
   cp $rgbdk_input_path $output_directory/rgbdk.npy
@@ -40,10 +44,6 @@ fi
 
 
 # Find affordance mask
-# Activate virtual environment for the first part of the pipeline
-echo "Activating virtual environment..."
-source ~/miniconda3/etc/profile.d/conda.sh
-conda activate main_env
 
 ## Get rgb from rbgd / bgrd
 python3 utils/rgbdk_to_rgb.py --input_path "$output_directory/rgbdk.npy" --output_path $output_directory
@@ -91,7 +91,7 @@ cd ~/robot-grasp/third_party/contact_graspnet
 python3 contact_graspnet/inference.py --np_path=$output_directory/contact_graspnet_input.npy --local_regions --filter_grasps --results_path=$output_directory
 conda deactivate
 
-# # Execute the grasp on the robot
+# # # Execute the grasp on the robot
 conda activate ros_noetic
 cd ~/robot-grasp/third_party/frankapy
 bash ./bash_scripts/start_control_pc.sh -i iam-dopey

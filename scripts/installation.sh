@@ -4,11 +4,23 @@
 # git submodule init
 # git submodule update --init --recursive
 
-# # Main environment setup
-source ~/miniconda3/etc/profile.d/conda.sh
-# conda env create -f $(pwd)/configs/conda_envs/main_env.yml
+
+# Main environment setup (used for GroundedSAM 2 and AffCorrs)
+# source ~/miniconda3/etc/profile.d/conda.sh
+# conda create --name main_env python=3.10.12
 # conda activate main_env
 # pip install git+https://github.com/lucasb-eyer/pydensecrf.git
+# pip3 install torch torchvision torchaudio
+# pip install -e $(pwd)/third_party/Grounded-SAM-2
+# pip install -r $(pwd)/third_party/Grounded-SAM-2/grounding_dino/requirements.txt
+# pip install --no-build-isolation -e $(pwd)/third_party/Grounded-SAM-2/grounding_dino
+# pip install scikit-image
+# pip install faiss-gpu
+# pip install numpy==1.26.4
+# pip install pytorch_metric_learning
+# pip install fast_pytorch_kmeans
+
+
 # conda deactivate
 
 # # AnyGrasp setup
@@ -24,6 +36,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 
 # # Contact Graspnet setup
+conda env remove --name contact_graspnet_env
 conda env create -f $(pwd)/configs/conda_envs/contact_graspnet_env.yml
 conda activate contact_graspnet_env
 cd $(pwd)/third_party/contact_graspnet
