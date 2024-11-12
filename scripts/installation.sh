@@ -31,16 +31,16 @@
 # sudo apt install build-essential python3-dev libopenblas-dev
 # pip install torch ninja
 # pip install -U git+https://github.com/NVIDIA/MinkowskiEngine --no-deps
-# conda activate anygrasp_env
-# python setup.py install
+echo $CUDA_HOME
+python setup.py install
 
 
 # # Contact Graspnet setup
-conda env remove --name contact_graspnet_env
-conda env create -f $(pwd)/configs/conda_envs/contact_graspnet_env.yml
-conda activate contact_graspnet_env
-cd $(pwd)/third_party/contact_graspnet
-sh compile_pointnet_tfops.sh
+# conda env remove --name contact_graspnet_env
+# conda env create -f $(pwd)/configs/conda_envs/contact_graspnet_env.yml
+# conda activate contact_graspnet_env
+# cd $(pwd)/third_party/contact_graspnet
+# sh compile_pointnet_tfops.sh
 
 
 # Grounded-SAM-2 setup

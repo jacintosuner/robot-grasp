@@ -48,7 +48,7 @@ def visualize_rgbdk(rgbdk_file_paths):
     camera_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2, origin=[0, 0, 0])
 
     # Load the camera calibration transformation matrix
-    CAMERA_CALIBRATION_FILE = '/home/lifanyu/robot-grasp/data/camera_calibration/cam0_calibration.npz'  # Update this path accordingly
+    CAMERA_CALIBRATION_FILE = '/home/jacinto/robot-grasp/data/camera_calibration/cam0_calibration.npz'  # Update this path accordingly
     calibration_data = np.load(CAMERA_CALIBRATION_FILE, allow_pickle=True)
     T_cam_to_world = np.linalg.inv(calibration_data['T'])
 

@@ -45,7 +45,7 @@ def capture_rgbd(output_path, to_images):
                 data_dict = {
                     "rgb": capture.color[:, :, :3][:, :, ::-1],  # Convert BGR to RGB
                     "depth": capture.transformed_depth,
-                    "K": k4a.calibration.get_camera_matrix(CalibrationType.DEPTH)
+                    "K": k4a.calibration.get_camera_matrix(CalibrationType.COLOR)
                 }
 
                 # Save the dictionary as a .npy file
