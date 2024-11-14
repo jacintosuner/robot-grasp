@@ -13,3 +13,6 @@
 [submodule "third_party/frankapy"]
 	path = third_party/frankapy
 	url = https://github.com/jacintosuner/frankapy
+[submodule "third_party/rtc_vision_toolbox"]
+	path = third_party/rtc_vision_toolbox
+	url = https://github.com/jacintosuner/rtc_vision_toolbox.git
