@@ -1,6 +1,7 @@
 import argparse
 import numpy as np
 import open3d as o3d
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument('rgbdk_file_paths', nargs='+', help='Paths to the RGB-D + K (camera matrix) data files')
@@ -8,7 +9,7 @@ parser.add_argument('--debug', action='store_true', help='Enable debug mode')
 cfgs = parser.parse_args()
 
 # Example
-# python3 visualize_rgbdk.py /home/lifanyu/robot-grasp/data/rgbdks/rgbdk.npy
+# python3 visualize_rgbdk.py ~/robot-grasp/data/rgbdks/rgbdk.npy
 
 def visualize_rgbdk(rgbdk_file_paths):
     combined_pcd = o3d.geometry.PointCloud()
@@ -48,29 +49,17 @@ def visualize_rgbdk(rgbdk_file_paths):
     camera_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2, origin=[0, 0, 0])
 
     # Load the camera calibration transformation matrix
-    CAMERA_CALIBRATION_FILE = '/home/jacinto/robot-grasp/data/camera_calibration/cam0_calibration.npz'  # Update this path accordingly
-    calibration_data = np.load(CAMERA_CALIBRATION_FILE, allow_pickle=True)
-    T_cam_to_world = np.linalg.inv(calibration_data['T'])
+    CAMERA_CALIBRATION_FILE = os.path.expanduser('~/robot-grasp/data/camera_calibration/robot2camera.npz')
+    T_world_to_cam = np.load(CAMERA_CALIBRATION_FILE, allow_pickle=True)
+    T_cam_to_world = np.linalg.inv(T_world_to_cam)
 
     # Create world frame
     world_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2, origin=[0, 0, 0])
     world_frame.transform(T_cam_to_world)
 
-    # Define the transformation matrix
-    transformation_matrix = np.array([
-        [-0.30971456,  0.4062519,   0.85967225,  0.30086598],
-        [-0.51987,    -0.829372,    0.20463927,  0.29557768],
-        [ 0.7961231,  -0.38353804,  0.46806675,  0.6623454 ],
-        [ 0.,          0.,          0.,          1.        ]
-    ])
-
-    # Create a reference frame and apply the transformation
-    reference_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2, origin=[0, 0, 0])
-    reference_frame.transform(transformation_matrix)
-
-    # Add reference frame to the visualization
+    # Add reference frames to the visualization
     o3d.visualization.draw_geometries(
-        [camera_frame, combined_pcd, world_frame, reference_frame],
+        [camera_frame, world_frame, combined_pcd],
         lookat=combined_pcd.get_center(),
         up=np.array([0.0, -1.0, 0.0]),
         front=-combined_pcd.get_center(),
