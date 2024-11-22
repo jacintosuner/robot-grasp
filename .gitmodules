@@ -16,3 +16,6 @@
 [submodule "third_party/rtc_vision_toolbox"]
 	path = third_party/rtc_vision_toolbox
 	url = https://github.com/jacintosuner/rtc_vision_toolbox.git
+[submodule "third_party/WiLoR"]
+	path = third_party/WiLoR
+	url = https://github.com/jacintosuner/WiLoR.git
