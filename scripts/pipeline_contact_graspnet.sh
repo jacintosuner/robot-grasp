@@ -42,18 +42,21 @@ else
   cp $rgbdk_input_path $output_directory/rgbdk.npy
 fi
 
+# Generate affordance mask reference from reference image
+
+
 
 # Find affordance mask
 
 ## Get rgb from rbgd / bgrd
 python3 utils/rgbdk_to_rgb.py --input_path "$output_directory/rgbdk.npy" --output_path $output_directory
 
-### Run Segmentation on the image to find where the mug is
+## Run Segmentation on the image to find where the mug is
 echo "Running segmentation on the image..."
 cd ~/robot-grasp/third_party/Grounded-SAM-2
 python3 grounded_sam2_local_demo.py --text_prompt "mug." --img_path $output_directory/rgb.jpg --output_dir $output_directory 
 
-# ### Create an image only with the segmented object within the bounding box
+## Create an image only with the segmented object within the bounding box
 echo "Creating an image only with the segmented object within the bounding box..."
 cd ~/robot-grasp/scripts
 python3 utils/create_image_with_segmented_object.py --input_path $output_directory/rgb.jpg --segmentation_path $output_directory/grounded_sam_seg_mug.json --output_path $output_directory/seg_mug.jpg

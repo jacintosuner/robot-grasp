@@ -3,14 +3,13 @@ import numpy as np
 import imageio
 from pyk4a import PyK4A, Config
 from pyk4a.calibration import CalibrationType
-import cv2  # Ensure you have OpenCV installed for resizing
 
 # Use
 # python3 capture_rgbdk.py --output_path ../../data/rgbdks/
 # python3 capture_rgbdk.py --output_path ../../data/rgbdks/ --to_images
 # rsync -r --progress ~/robot-grasp/data/rgbdks/rgbdk.npy jacinto@ham1.pc.cs.cmu.edu:/home/jacinto/robot-grasp/data/rgbdks
 
-def capture_rgbd(output_path, to_images):
+def capture_rgbd(output_path, to_images, name):
     # Create a output_path if it doesn't exist
     if not os.path.exists(output_path):
         os.makedirs(output_path)
@@ -49,7 +48,7 @@ def capture_rgbd(output_path, to_images):
                 }
 
                 # Save the dictionary as a .npy file
-                npy_path = os.path.join(output_path, "rgbdk.npy")
+                npy_path = os.path.join(output_path, f"{name}.npy")
                 np.save(npy_path, data_dict)
 
                 print(f"Saved RGBD data to {npy_path}")
@@ -66,6 +65,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Capture RGBD data using Azure Kinect.')
     parser.add_argument('--output_path', type=str, help='Directory to save RGBD data')
     parser.add_argument('--to_images', action='store_true', help='Save RGB and Depth data as a single .npy file')
+    parser.add_argument('--name', type=str, default='rgbdk', help='Base name for the saved files')
 
     args = parser.parse_args()
-    capture_rgbd(args.output_path, args.to_images)
+    capture_rgbd(args.output_path, args.to_images, args.name)
