@@ -1,0 +1,46 @@
+{
+    "image_path": "/home/jacinto/robot-grasp/data/contact_graspnet_pipeline_results_20241126_150530/rgb.jpg",
+    "annotations": [
+        {
+            "class_name": "mug",
+            "bbox": [
+                711.9633178710938,
+                456.6891784667969,
+                837.6491088867188,
+                585.5367431640625
+            ],
+            "segmentation": {
+                "size": [
+                    720,
+                    1280
+                ],
+                "counts": "XTe?6Qf0b0D6K5K4L3M3M3N2N2OUO^[OHad06c[OJ\\d04g[OKYd02k[OMTd03m[ONRd01P\\ONPd01Q\\OOoc00R\\O0nc00R\\O0nc0OT\\O1jc0OW\\O1ic0OV\\O2jc0NV\\O2jc0NV\\O2jc0NU\\O3kc0MU\\O3kc0MU\\O3kc0MT\\O4lc0MQ\\O6nc0Jo[O9Qd0Ij[O:Ud0T1L3G9H8J6L3M4M2M3N2N2N2N2O1N2O1N101O1O0O2O001N101O001O0O2O0000001O00001O000O100001O0001O0000000001O000O1000001O000000001N10001N101N101N100O2N1O2N1O2N1O2N2M2O2M3M2M4L4K5L4I7J6J6I8J5F;K5G:I\\Pg9"
+            },
+            "score": [
+                0.96875
+            ]
+        },
+        {
+            "class_name": "mug",
+            "bbox": [
+                834.4155883789062,
+                380.9980163574219,
+                872.9132690429688,
+                434.0672912597656
+            ],
+            "segmentation": {
+                "size": [
+                    720,
+                    1280
+                ],
+                "counts": "SiZb05Zf04L4L3N1O2M3N1O3M1O1O2M3N3M2N1O1O2N2O0O2N1O1O1O010O000001N2L3N3M3L3K6J6L4K5L6IiRm8"
+            },
+            "score": [
+                0.91015625
+            ]
+        }
+    ],
+    "box_format": "xyxy",
+    "img_width": 1280,
+    "img_height": 720
+}

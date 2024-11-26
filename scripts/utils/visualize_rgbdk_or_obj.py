@@ -9,8 +9,8 @@ parser.add_argument('--debug', action='store_true', help='Enable debug mode')
 cfgs = parser.parse_args()
 
 # Example
-# python3 visualize_rgbdk.py ~/robot-grasp/data/rgbdks/rgbdk.npy
-# python3 visualize_rgbdk.py ~/robot-grasp/data/mask_references/new_reference/rgbdk.npy ~/robot-grasp/data/mask_references/new_reference/rgb_0.obj
+# python3 visualize_rgbdk_or_obj.py ~/robot-grasp/data/rgbdks/rgbdk.npy
+# python3 visualize_rgbdk_or_obj.py ~/robot-grasp/data/mask_references/reference_20241122_153952/initial_scene.npy ~/robot-grasp/data/mask_references/reference_20241122_153952/hand_frames/hand_grasping_0.obj
 
 def visualize_rgbdk(file_paths):
     combined_pcd = o3d.geometry.PointCloud()
@@ -74,7 +74,7 @@ def visualize_rgbdk(file_paths):
     camera_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2, origin=[0, 0, 0])
 
     # Load the camera calibration transformation matrix
-    CAMERA_CALIBRATION_FILE = os.path.expanduser('~/robot-grasp/data/camera_calibration/robot2camera.npz')
+    CAMERA_CALIBRATION_FILE = os.path.expanduser('~/robot-grasp/data/camera_calibration/camera2robot.npz')
     T_world_to_cam = np.load(CAMERA_CALIBRATION_FILE, allow_pickle=True)
     T_cam_to_world = np.linalg.inv(T_world_to_cam)
 

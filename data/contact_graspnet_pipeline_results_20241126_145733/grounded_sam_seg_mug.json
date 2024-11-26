@@ -1,0 +1,65 @@
+{
+    "image_path": "/home/jacinto/robot-grasp/data/contact_graspnet_pipeline_results_20241126_145733/rgb.jpg",
+    "annotations": [
+        {
+            "class_name": "mug",
+            "bbox": [
+                712.0814208984375,
+                456.7123107910156,
+                837.70361328125,
+                585.6786499023438
+            ],
+            "segmentation": {
+                "size": [
+                    720,
+                    1280
+                ],
+                "counts": "YTe?5Rf0b0D6J5L5K3M3M3N2N2OVO][OGcd06a[OJ]d04g[OKYd02k[ONTd01m[OORd01P\\ONPd01Q\\OOoc01Q\\O0nc0OS\\O1mc0NU\\O1jc0OW\\O1ic0OW\\O1ic0OV\\O2jc0NV\\O2jc0NU\\O3kc0MU\\O3kc0MU\\O3kc0MT\\O5kc0LR\\O6nc0JP\\O8Pd0Jk[O9Td0U1L3G:G7K6L3M4M2M3N2N2N2N2O1N2O1O0O2O1O0O2O001O0O2O001O0O101O00001O0000001O000000000000001OO1000001O000000001O000000001N10000O2O001N101N1O101N1O2N1O2N1O2N2N1N3M3M2M4L4K5K5H8K5J6J7J5G:I7G:I\\Pg9"
+            },
+            "score": [
+                0.96875
+            ]
+        },
+        {
+            "class_name": "mug",
+            "bbox": [
+                1174.491455078125,
+                577.5096435546875,
+                1279.67431640625,
+                708.6859130859375
+            ],
+            "segmentation": {
+                "size": [
+                    720,
+                    1280
+                ],
+                "counts": "SVli05Vf08J6H7L4K5M3L;D7J7I5K4H8L4M2O1N2N2N2O1N101N2N101N2O000O101O00001N2O001O0000001O000001O01O00000000000001O000O2O01O01O001O0001O01O01Z]OjLPb0U3g0N101O1O0O2N1O2Nj\\OSMkb0m2P]OYMPc0f2=O2O1O0O2L301O0O2O0L5L4M2N3M3M2N3M3M2O2M2N4K4M4K3000P]O"
+            },
+            "score": [
+                0.9453125
+            ]
+        },
+        {
+            "class_name": "mug",
+            "bbox": [
+                834.5897216796875,
+                380.8157653808594,
+                872.0184326171875,
+                433.5960388183594
+            ],
+            "segmentation": {
+                "size": [
+                    720,
+                    1280
+                ],
+                "counts": "SiZb06Xf04M3N2M3N1N3N2M3N1O1O2N2N2N2N2N2N2N3N0O1O1O100O000001N100N3M3M2L5M3L4K5I7M3K\\im8"
+            },
+            "score": [
+                0.89453125
+            ]
+        }
+    ],
+    "box_format": "xyxy",
+    "img_width": 1280,
+    "img_height": 720
+}

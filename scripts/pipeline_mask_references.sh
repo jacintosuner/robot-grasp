@@ -1,12 +1,14 @@
 #!/bin/bash
 
+# Example usage: ./pipeline_mask_references.sh
+
 timestamp=$(date +"%Y%m%d_%H%M%S")
 output_dir=~/robot-grasp/data/mask_references/reference_$timestamp
 mkdir -p $output_dir
 
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate main_env
-cd utils
+cd ~/robot-grasp/scripts/utils
 python capture_rgbdk.py --output_path $output_dir --name initial_scene
 echo Sleeping for 4 seconds
 sleep 4
@@ -24,4 +26,4 @@ conda deactivate
 conda activate main_env
 cd ~/robot-grasp/scripts/utils
 python visualize_rgbdk_or_obj.py $output_dir/initial_scene.npy $output_dir/hand_frames/hand_grasping_0.obj
-python generate_affordance_mask.py --initial_scene $output_dir/initial_scene.npy --hand $output_dir/hand_frames/hand_grasping_0.obj --output_dir $output_dir
+python generate_affordance_reference.py --initial_scene $output_dir/initial_scene.npy --hand $output_dir/hand_frames/hand_grasping_0.obj --output_dir $output_dir

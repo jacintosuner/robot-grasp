@@ -3,6 +3,7 @@ import argparse
 import math
 import robot_controller
 from frankapy.franka_constants import FrankaConstants as FC
+import os
 
 # Example
 # python3 execute_contact_graspnet_grasps.py --grasps_file_path ~/robot-grasp/data/contact_graspnet_pipeline_results/contact_graspnet_results.npz
@@ -11,7 +12,8 @@ from frankapy.franka_constants import FrankaConstants as FC
 JOINT_LIMITS_MIN = [-2.8973, -1.7628, -2.8973, -3.0718, -2.8973, -0.0175, -2.8973]
 JOINT_LIMITS_MAX = [2.8973, 1.7628, 2.8973, -0.0698, 2.8973, 3.7525, 2.8973]
 HOME_JOINTS = [0, 0, 0, -math.pi / 2, 0, math.pi / 2, math.pi / 4]
-CAMERA_CALIBRATION_FILE = '/home/lifanyu/robot-grasp/data/camera_calibration/cam0_calibration.npz'
+CAMERA_CALIBRATION_FILE = '~/robot-grasp/data/camera_calibration/camera2robot.npz'
+MOVE_Z_BY = 0.07
 
 d = math.pi/8
 
@@ -31,8 +33,7 @@ def main(input_file):
     best_grasp = pred_grasps_cam[1][np.argmax(scores[1])]
 
     # Load the camera calibration transformation matrix
-    calibration_data = np.load(CAMERA_CALIBRATION_FILE, allow_pickle=True)
-    T_cam_to_world = np.linalg.inv(calibration_data['T'])
+    T_cam_to_world = np.load(os.path.expanduser(CAMERA_CALIBRATION_FILE), allow_pickle=True)
 
     # Transform the best grasp from camera reference to world reference
     print(best_grasp)
@@ -48,9 +49,19 @@ def main(input_file):
     # controller.reset(joint_positions = HOME_JOINTS)
     # controller.reset(joint_positions = FC.READY_JOINTS)
 
-    # # Move the robot to the target position and orientation
+    # Move the robot to the target position and orientation
+    ## Create and apply rotation matrix for 90 degrees around z-axis (to align the gripper with the contact graspnet grasp)
+    rot_z = np.array([[0, -1, 0],
+                      [1, 0, 0],
+                      [0, 0, 1]])
+    best_grasp_world[:3, :3] = best_grasp_world[:3, :3] @ rot_z
+    ## Move the robot to the target position and orientation
+    controller.move_to(target_pos=best_grasp_world[:3, 3], target_rot=best_grasp_world[:3, :3], use_rot=True, duration=10)
+    ## Approach the grasp closer to the object by 4 cm (0.04 m) along the z-axis
+    target_pos = best_grasp_world[:3, 3] + MOVE_Z_BY * best_grasp_world[:3, 2]
+    controller.move_to(target_pos=target_pos, target_rot=best_grasp_world[:3, :3], use_rot=True)
 
-    # # controller.move_to(target_pos=best_grasp_world[:3, 3], target_rot=best_grasp_world[:3, :3], use_rot=True)
+    # controller move by a given position to orient the new version of it
     # controller.move_to(target_pos=best_grasp_world[:3, 3], target_rot=np.eye(3), use_rot=True, duration=10)
 
 if __name__ == "__main__":

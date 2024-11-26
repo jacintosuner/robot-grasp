@@ -1,0 +1,25 @@
+{
+    "image_path": "/home/jacinto/robot-grasp/data/contact_graspnet_pipeline_results_20241126_145733/seg_mug.jpg",
+    "annotations": [
+        {
+            "class_name": "robot",
+            "bbox": [
+                0.00439453125,
+                0.7816886901855469,
+                125.00403594970703,
+                128.4458770751953
+            ],
+            "segmentation": {
+                "size": [
+                    129,
+                    125
+                ],
+                "counts": "0P2:^1`0E7K4L4L3M3M3N2O0OYOiMGV25PNIP24TNLj12ZNMf12\\NNc11^NOa11aNN_11bNO^11bN0]1OdN1\\1NeN2[1NeN2[1MfN3Z1MeN4[1LeN4[1LdN5[1LeN4\\1LbN5]1LaN6_1K]N8c1MmM]OOn0R2P1iNPN3V2e08I7K5L3M3N2M3DkLIW3?2O1N2GdLJ^3<1O1N101O1N101O0O2O001O001N1000001O00001O0000001O001O00000000000000000001O000000001O000O1O101O00000O2O001N100O2N101N1O2N1O2N1O2M3N1O2L4L4M2M4I7K5J6J7G8K5G:J7EZO[ObN?b1A"
+            },
+            "score": 0.9375
+        }
+    ],
+    "box_format": "xyxy",
+    "img_width": 125,
+    "img_height": 129
+}
