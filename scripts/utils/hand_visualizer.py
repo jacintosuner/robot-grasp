@@ -2,6 +2,19 @@ import numpy as np
 import argparse
 import open3d as o3d
 
+# example usage: python3 hand_visualizer.py --hand ~/robot-grasp/data/mask_references/carton_milk_reference_20241203/hand_frames/hand_grasping_0.obj
+
+HAND_KEYPOINTS = [
+    48, 49, 67, 68, 69, 70, 71, 72, 73, 74, 75, 
+    78, 95, 142, 143, 147, 148, 149, 152, 153, 
+    158, 166, 167, 195, 269, 272, 276, 281, 289,
+    329, 341, 342, 343, 344, 357, 358, 
+    359, 360, 371, 376, 377, 379, 380, 387, 388, 393, 
+    403, 439, 441, 453, 454, 455, 456, 469, 
+    470, 471, 472, 486, 487, 490, 497, 498, 514, 567, 571, 573, 574, 
+    684, 691, 756, 757, 764
+]
+
 def load_obj_with_indices(file_path, scale=1000.0):
     """Load OBJ file and return pointcloud with all vertices"""
     with open(file_path, 'r') as f:
@@ -15,7 +28,10 @@ def load_obj_with_indices(file_path, scale=1000.0):
         if line.startswith('v '):
             parts = line.strip().split()
             x, y, z = map(float, parts[1:4])
-            r, g, b = map(float, parts[4:7]) if len(parts) > 6 else (0.5, 0.5, 0.5)
+            if idx in HAND_KEYPOINTS:
+                r, g, b = 1.0, 0.0, 0.0
+            else:
+                r, g, b = map(float, parts[4:7]) if len(parts) > 6 else (0.5, 0.5, 0.5)
             points.append([x, y, z])
             colors.append([r, g, b])
             vertex_indices.append(idx)

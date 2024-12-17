@@ -1,7 +1,8 @@
 import os
 import numpy as np
 import imageio
-from pyk4a import PyK4A, Config
+from pyk4a import PyK4A, Config, k4a_module
+import pyk4a
 from pyk4a.calibration import CalibrationType
 
 # Use
@@ -15,7 +16,11 @@ def capture_rgbd(output_path, to_images, name):
         os.makedirs(output_path)
 
     # Initialize the Azure Kinect camera with the desired configuration
-    k4a = PyK4A()  # Adjust config as needed
+    device_count = k4a_module.device_get_installed_count()
+    for device_id in range(device_count):
+        print(f"Device ID: {device_id}")
+
+    k4a = PyK4A(device_id=0)  # Adjust config as needed
     k4a.start()
 
     try:

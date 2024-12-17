@@ -3,7 +3,7 @@
 # Examples:
 # cd scripts
 # ./pipeline_contact_graspnet.sh --rgbdk_path ~/robot-grasp/data/rgbdks/rgbdk.npy --mask_reference_path ~/robot-grasp/data/mask_references/mug_reference
-# ./pipeline_contact_graspnet.sh --mask_reference_path ~/robot-grasp/data/mask_references/reference_20241122_153952
+# ./pipeline_contact_graspnet.sh --mask_reference_path ~/robot-grasp/data/mask_references/reference_20241122_153952 --object_name mug
 
 
 # Creating folder with results
@@ -25,6 +25,7 @@ while [[ "$#" -gt 0 ]]; do
   case $1 in
     --rgbdk_path) rgbdk_input_path="$2"; shift ;;
     --mask_reference_path) mask_reference_path="$2"; shift ;;
+    --object_name) object_name="$2"; shift ;;
     *) echo "Unknown parameter passed: $1"; exit 1 ;;
   esac
   shift
@@ -32,6 +33,11 @@ done
 
 if [ -z "$mask_reference_path" ]; then
   echo "Error: --mask_reference_path not provided."
+  exit 1
+fi
+
+if [ -z "$object_name" ]; then
+  echo "Error: --object_name not provided."
   exit 1
 fi
 
@@ -53,26 +59,26 @@ fi
 ## Get rgb from rbgd / bgrd
 python3 utils/rgbdk_to_rgb.py --input_path "$output_directory/rgbdk.npy" --output_path $output_directory
 
-## Run Segmentation on the image to find where the mug is
+## Run Segmentation on the image to find where the object is
 echo "############################# Running segmentation on the image..."
 cd ~/robot-grasp/third_party/Grounded-SAM-2
-python3 grounded_sam2_local_demo.py --text_prompt "mug." --img_path $output_directory/rgb.jpg --output_dir $output_directory 
+python3 grounded_sam2_local_demo.py --text_prompt "$object_name." --img_path $output_directory/rgb.jpg --output_dir $output_directory 
 
 ## Create an image only with the segmented object within the bounding box
 echo "############################# Creating an image only with the segmented object within the bounding box..."
 cd ~/robot-grasp/scripts
-python3 utils/create_image_with_segmented_object.py --input_path $output_directory/rgb.jpg --segmentation_path $output_directory/grounded_sam_seg_mug.json --output_path $output_directory/seg_mug.jpg
+python3 utils/create_image_with_segmented_object.py --input_path $output_directory/rgb.jpg --segmentation_path $output_directory/grounded_sam_seg_${object_name}.json --output_path $output_directory/seg_${object_name}.jpg
 
 ## Run Affordance Mask
 echo "############################# Running Affordance Mask..."
 cd ../third_party/UCL-AffCorrs/demos
-python3 show_part_annotation_correspondence.py --reference_dir_path $mask_reference_path --target_image_path $output_directory/seg_mug.jpg --output_dir_path $output_directory
+python3 show_part_annotation_correspondence.py --reference_dir_path $mask_reference_path --target_image_path $output_directory/seg_${object_name}.jpg --output_dir_path $output_directory
 
 
 # Zero out the features from the robot
 ### Run Grounded-SAM-2 on the image
 cd ~/robot-grasp/third_party/Grounded-SAM-2
-python3 grounded_sam2_local_demo.py --text_prompt "robot." --img_path $output_directory/seg_mug.jpg --output_dir $output_directory
+python3 grounded_sam2_local_demo.py --text_prompt "robot." --img_path $output_directory/seg_${object_name}.jpg --output_dir $output_directory
 
 
 ### Zero out the features from the robot
@@ -84,7 +90,7 @@ python3 zero_out_features.py --affordance_path $output_directory/affordance_mask
 # # Prepare input for Contact Graspnet
 echo "############################# Preparing input for Contact Graspnet..."
 cd ~/robot-grasp/scripts
-python3 utils/contact_graspnet_input_preprocessing.py --data_dir $output_directory
+python3 utils/contact_graspnet_input_preprocessing.py --data_dir $output_directory --object_name $object_name
 
 conda deactivate
 
@@ -92,7 +98,8 @@ conda deactivate
 echo "############################# Running Contact Graspnet..."
 conda activate contact_graspnet_env
 cd ~/robot-grasp/third_party/contact_graspnet
-python3 contact_graspnet/inference.py --np_path $output_directory/contact_graspnet_input.npy --local_regions --filter_grasps --results_path $output_directory
+# python3 contact_graspnet/inference.py --np_path $output_directory/contact_graspnet_input.npy --local_regions --filter_grasps --results_path $output_directory
+python3 contact_graspnet/inference.py --np_path $output_directory/contact_graspnet_input.npy --filter_grasps --results_path $output_directory
 conda deactivate
 
 # # # Execute the grasp on the robot

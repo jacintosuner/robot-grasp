@@ -18,7 +18,3 @@
 	url = https://github.com/jacintosuner/rtc_vision_toolbox.git
 [submodule "third_party/WiLoR"]
 	path = third_party/WiLoR
-	url = https://github.com/jacintosuner/WiLoR.git
-[submodule "third_party/franka_description"]
-	path = third_party/franka_description
-	url = https://github.com/frankaemika/franka_description

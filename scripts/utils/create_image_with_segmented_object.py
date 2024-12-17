@@ -34,6 +34,7 @@ def create_segmented_image(image, segmentation_data, bbox):
     # Crop the image to the bounding box
     x1, y1, x2, y2 = map(int, bbox)
     cropped_segmented_image = segmented_image_np[y1:y2, x1:x2]
+    # cropped_segmented_image = image_np[y1:y2, x1:x2]
 
     return Image.fromarray(cropped_segmented_image)
 

@@ -26,4 +26,5 @@ conda deactivate
 conda activate main_env
 cd ~/robot-grasp/scripts/utils
 python visualize_rgbdk_or_obj.py $output_dir/initial_scene.npy $output_dir/hand_frames/hand_grasping_0.obj
+# python visualize_rgbdk_or_obj.py $output_dir/hand_frames/hand_grasping.npy $output_dir/hand_frames/hand_grasping_0.obj
 python generate_affordance_reference.py --initial_scene $output_dir/initial_scene.npy --hand $output_dir/hand_frames/hand_grasping_0.obj --output_dir $output_dir
