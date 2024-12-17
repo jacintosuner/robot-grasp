@@ -13,8 +13,6 @@ import sys
 import logging
 import math
 from autolab_core import RigidTransform
-sys.path.append('/home/frankapy/frankapy')
-sys.path.append('/home/lifanyu/camera_calibration/hacman_real_robot-main/hacman_real_env')
 import frankapy
 from frankapy import FrankaArm
 from frankapy.franka_constants import FrankaConstants as FC
@@ -352,17 +350,20 @@ class FrankaOSCController():
             2.10698001,
             0.27106661]
         
-    def reset(self, joint_positions=None, grasp=True, ignore_virtual_walls=True, duration = 3):
+    def reset(self, joint_positions=None, grasp=False, ignore_virtual_walls=True, duration = 3):
+        if grasp == False:
+            fa.open_gripper()
         joint_positions = joint_positions if joint_positions is not None else FC.HOME_JOINTS
         fa.goto_joints(joint_positions, ignore_virtual_walls=ignore_virtual_walls, duration=duration)
-        if grasp == False:
-            fa.open_gripper()
 
     # Go to Franka arm's official reset pose
-    def reset_franka(self, grasp = False):
-        fa.goto_pose(FC.HOME_POSE)
-        if grasp == False:
-            fa.open_gripper()
+    def reset_franka(self, grasp = False, duration = 3, block = True):
+        if not grasp:
+            print("Opening gripper")
+            fa.open_gripper(block=block)
+        
+        print("Resetting the robot")
+        fa.goto_pose(FC.HOME_POSE, duration = duration)
 
     def reset_pose(self):
         fa.reset_pose()
@@ -372,7 +373,6 @@ class FrankaOSCController():
                 target_pos,
                 target_quat=None,
                 target_delta_axis_angle=None,
-                grasp=True,
                 use_rot = False,
                 target_rot = None,
                 duration = 3,
@@ -397,8 +397,6 @@ class FrankaOSCController():
                                      from_frame='franka_tool', to_frame='world')
 
         fa.goto_pose(TARGET_POSE, duration = duration)
-        if grasp == False:
-            fa.open_gripper()
 
     # move by a certain delta position XYZ or delta axis angle
     def move_by(self, 
@@ -434,12 +432,14 @@ class FrankaOSCController():
         self.move_to(target_pos, target_quat, target_delta_axis_angle=target_delta_axis_angle, grasp=grasp, num_steps=num_steps, num_additional_steps=num_additional_steps, duration=duration)
 
     # move the gripper to a certain width
-    def gripper_move_to(self, width):
+    def gripper_move_to(self, width, block=False):
         if width == 0.08:
-            fa.open_gripper()
+            # grasp = True tells franka interface that the robot is currently grasping something, and needs to release it asap
+            # if you look into franka interface code, with grasp = True, it sends franka a different skill to let it open gripper immediately
+            # I kept the low-level grasp = False by default, so that the robot will not close gripper when being reset (when fa.open_gripper() is called)
+            fa.goto_gripper(width=width, block=block, grasp=True)
         else:
-
-            fa.goto_gripper(width=width)
+            fa.goto_gripper(width=width, block=block)
     
     def update_controller_config(self, controller_cfg):
         self.controller_cfg = controller_cfg
@@ -474,7 +474,7 @@ class FrankaOSCController():
     @property
     def gripper_position(self):
         # return the current gripper position (open width)
-        np.array(fa._state_client._get_current_robot_state().robot_state.O_T_EE).reshape(4, 4).transpose()
+        return np.array(fa._state_client._get_current_robot_state().robot_state.O_T_EE).reshape(4, 4).transpose()
 
 
 ################################## Movements #################################
