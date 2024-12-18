@@ -98,8 +98,9 @@ conda deactivate
 echo "############################# Running Contact Graspnet..."
 conda activate contact_graspnet_env
 cd ~/robot-grasp/third_party/contact_graspnet
-# python3 contact_graspnet/inference.py --np_path $output_directory/contact_graspnet_input.npy --local_regions --filter_grasps --results_path $output_directory
-python3 contact_graspnet/inference.py --np_path $output_directory/contact_graspnet_input.npy --filter_grasps --results_path $output_directory
+# python3 contact_graspnet/inference.py --np_path $output_directory/contact_graspnet_input.npy --local_regions --filter_grasps --results_path $output_directory --ckpt_dir ~/robot-grasp/third_party/contact_graspnet/checkpoints/scene_test_2048_bs3_hor_sigma_0025
+python3 contact_graspnet/inference.py --np_path $output_directory/contact_graspnet_input.npy --filter_grasps --results_path $output_directory --ckpt_dir ~/robot-grasp/third_party/contact_graspnet/checkpoints/scene_test_2048_bs3_hor_sigma_0025
+# python3 contact_graspnet/inference.py --np_path $output_directory/contact_graspnet_input.npy --results_path $output_directory --ckpt_dir ~/robot-grasp/third_party/contact_graspnet/checkpoints/scene_test_2048_bs3_hor_sigma_0025
 conda deactivate
 
 # # # Execute the grasp on the robot
