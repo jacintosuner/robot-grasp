@@ -6,6 +6,10 @@
 # $ git config --global mergetool.keepBackup false
 *.orig
 
+# Videos:
+*.mp4
+*.mkv
+
 # Created by git when using merge tools for conflicts
 *.BACKUP.*
 *.BASE.*

@@ -123,10 +123,10 @@ def save_padded_mask_and_overlay(mask, image, output_dir='./', pad_percent=0.3):
     cv2.imwrite(os.path.join(output_dir, 'annotation.png'), cropped_overlay)
     cv2.imwrite(os.path.join(output_dir, 'prototype.png'), cropped_original)
 
-def main(hand_file_path, initial_scene_file_path, output_dir):
+def main(hand_file_path, clear_scene_file_path, output_dir):
     # Load both pointclouds
     hand_pcd = load_obj(hand_file_path)
-    scene_pcd = load_npy(initial_scene_file_path)
+    scene_pcd = load_npy(clear_scene_file_path)
 
     # Reduce the opacity of the colors in the scene pointcloud
     scene_colors = np.asarray(scene_pcd.colors)
@@ -149,7 +149,7 @@ def main(hand_file_path, initial_scene_file_path, output_dir):
     )
 
     # Load the original image
-    data = np.load(initial_scene_file_path, allow_pickle=True).item()
+    data = np.load(clear_scene_file_path, allow_pickle=True).item()
     image = data.get('rgb')
 
     # Create a mask for the points near the hand
@@ -168,7 +168,7 @@ def main(hand_file_path, initial_scene_file_path, output_dir):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process an OBJ file and an NPY file.")
     parser.add_argument('--hand', required=True, help="Path to the OBJ file")
-    parser.add_argument('--initial_scene', required=True, help="Path to the NPY file")
+    parser.add_argument('--clear_scene', required=True, help="Path to the NPY file")
     parser.add_argument('--output_dir', default='./', help="Directory to save the output files")
     args = parser.parse_args()
-    main(args.hand, args.initial_scene, args.output_dir)
+    main(args.hand, args.clear_scene, args.output_dir)

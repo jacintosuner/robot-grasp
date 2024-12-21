@@ -1,1 +1,3 @@
-echo "First parameter: $1"
+echo "hello"
+exit 0
+echo "test"

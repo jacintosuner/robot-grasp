@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Optional, Union
-from pyk4a import PyK4ARecord, K4AException, PyK4A, Config
+from pyk4a import PyK4ARecord, K4AException, PyK4A, Config, FPS
 import time
 import argparse
 import subprocess
@@ -26,7 +26,6 @@ class VideoCapture:
         
         capture = self.device.get_capture()
         self.record.write_capture(capture)
-        self.record.write_capture(capture)
 
     def flush(self):
         self.record.flush()
@@ -51,12 +50,13 @@ class VideoCapture:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Capture video from a device.")
-    parser.add_argument("--duration", type=int, help="Duration of the video capture in seconds.")
+    parser.add_argument("--duration", type=int, default=5, help="Duration of the video capture in seconds.")
     parser.add_argument("--output_path", type=str, required=True, help="Path to save the output video.")
-    parser.add_argument("--stream_type", type=str, choices=['color', 'depth'], default='color', help="Stream type to export (color or depth).")
+    parser.add_argument("--extra_export_stream_type", type=str, choices=[None, 'color', 'depth'], default='color', help="Stream type to export (color or depth).")
+    parser.add_argument("--fps", type=int, choices=[5, 15, 30], default=15, help="Frames per second for the video capture.")
     args = parser.parse_args()
 
-    config = Config()  # Initialize with appropriate configuration
+    config = Config(camera_fps=FPS.FPS_30 if args.fps == 30 else FPS.FPS_15 if args.fps == 15 else FPS.FPS_5)  # Initialize with appropriate configuration
     device = PyK4A(config)
     device.start()
 
@@ -73,4 +73,5 @@ if __name__ == "__main__":
         video_capture.flush()
         video_capture.stop()
         device.stop()
-        video_capture.convert_to_mp4(args.stream_type)
+        if args.extra_export_stream_type:
+            video_capture.convert_to_mp4(args.extra_export_stream_type)
