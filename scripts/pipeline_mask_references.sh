@@ -17,17 +17,18 @@ source ~/miniconda3/etc/profile.d/conda.sh
 # echo Done sleeping
 # python capture_rgbdk.py --output_path $output_dir/hand_frames --name hand_grasping
 
-# NEW:
-# Capture the video or get an already recorded video
+
+# Capture the video
 conda activate main_env
 cd ~/robot-grasp/scripts/utils
 python capture_video.py --output_path $output_dir/demo.mkv
 conda deactivate
 
-# Extract when the hand is grasping the object
+# Analyse video to find, frame by frame, when the hand is grasping an object, what type of object,...
 conda activate hands23
 cd ~/robot-grasp/third_party/hands23_detector
 python demo.py --video_path $output_dir/demo.mkv --save_dir $output_dir
+mv "$output_dir/result.json" "$output_dir/result_hands23.json"
 conda deactivate
 
 
@@ -35,12 +36,10 @@ conda deactivate
 # Extract the hand grasping npy file
 conda activate main_env
 cd ~/robot-grasp/scripts/utils
-python extract_clear_and_grasping_frames.py --dir_path $output_dir
-
-
+python extract_key_frames.py --dir_path $output_dir --extract_frames clear initial_grasping
 # Find the 3D hand in the grasping frame
 mkdir -p $output_dir/hand_frames
-cp $output_dir/hand_grasping.npy $output_dir/hand_frames/hand_grasping.npy
+cp $output_dir/hand_grasping.npy $output_dir/hand_frames/initial_grasping_scene.npy
 conda deactivate
 conda activate wilor
 cd ~/robot-grasp/third_party/WiLoR

@@ -6,7 +6,7 @@ import argparse
 import subprocess
 import numpy as np  # Required for depth image normalization
 
-# Example usage: python capture_video.py --duration 4 --output_path ../../data/videos/output.mkv --stream_type color
+# Example usage: python capture_video.py --duration 4 --output_path ../../data/videos/output.mkv
 
 class VideoCapture:
     def __init__(self, output_path: Union[str, Path], config: Config, device: Optional[PyK4A] = None):
@@ -30,15 +30,16 @@ class VideoCapture:
     def flush(self):
         self.record.flush()
 
-    def convert_to_mp4(self, stream_type: str):
+    def convert_to_mp4(self, stream_type: str, output_path: Optional[Union[str, Path]] = None):
         if stream_type == 'color':
-            mp4_path = self.output_path.with_name('color.mp4')
+            output_stem = self.output_path.stem
+            mp4_path = self.output_path.with_name(f'{output_stem}_color.mp4')
             subprocess.run([
                 'ffmpeg', '-i', str(self.output_path), '-map', '0:0',
                 '-c:v', 'libx264', str(mp4_path)
             ], check=True)
         elif stream_type == 'depth':
-            mp4_path = self.output_path.with_name('depth.mp4')
+            mp4_path = self.output_path.with_name(f'{output_stem}_depth.mp4')
             subprocess.run([
                 'ffmpeg', '-i', str(self.output_path), '-map', '0:1',
                 '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
@@ -57,7 +58,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     config = Config(camera_fps=FPS.FPS_30 if args.fps == 30 else FPS.FPS_15 if args.fps == 15 else FPS.FPS_5)  # Initialize with appropriate configuration
-    device = PyK4A(config)
+    device = PyK4A(config, device_id=1)
     device.start()
 
     video_capture = VideoCapture(args.output_path, config, device)

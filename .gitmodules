@@ -24,3 +24,6 @@
 [submodule "third_party/taxposeD"]
 	path = third_party/taxposeD
 	url = https://github.com/himty/taxposeD.git
+[submodule "third_party/taxpose"]
+	path = third_party/taxpose
+	url = https://github.com/r-pad/taxpose.git
