@@ -21,3 +21,9 @@
 [submodule "third_party/hands23_detector"]
 	path = third_party/hands23_detector
 	url = https://github.com/jacintosuner/hands23_detector
+[submodule "third_party/taxposeD"]
+	path = third_party/taxposeD
+	url = https://github.com/himty/taxposeD.git
+[submodule "third_party/--force"]
+	path = third_party/--force
+	url = https://github.com/r-pad/taxpose.git
