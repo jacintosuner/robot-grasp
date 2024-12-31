@@ -24,6 +24,3 @@
 [submodule "third_party/taxposeD"]
 	path = third_party/taxposeD
 	url = https://github.com/himty/taxposeD.git
-[submodule "third_party/--force"]
-	path = third_party/--force
-	url = https://github.com/r-pad/taxpose.git
