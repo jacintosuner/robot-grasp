@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# Example usage: ./capture_video_demos.sh --output_directory ~/robot-grasp/data/demos/videos --num_videos 15
+
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --output_directory) OUTPUT_DIR="$2"; shift ;;
+        --num_videos) NUM_VIDEOS="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -15,10 +18,15 @@ if [ -z "$OUTPUT_DIR" ]; then
     OUTPUT_DIR=~/robot-grasp/data/demos_$timestamp/videos
 fi
 
+# Set default number of videos if not provided
+if [ -z "$NUM_VIDEOS" ]; then
+    NUM_VIDEOS=15
+fi
+
 # Create the output directory if it doesn't exist
 mkdir -p "$OUTPUT_DIR"
 
-for i in $(seq 1 15); do
+for i in $(seq 1 $NUM_VIDEOS); do
     echo "Press any key to start capturing video $i..."
     read -n 1 -s
     for j in $(seq 4 -1 1); do
