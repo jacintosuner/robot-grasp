@@ -16,16 +16,16 @@ echo "Activating virtual environment..."
 source ~/miniconda3/etc/profile.d/conda.sh
 
 # # Analyze videos to find, frame by frame, when the hand is grasping an object, what type of object it is, etc.
-# conda activate hands23
-# cd ~/robot-grasp/third_party/hands23_detector
-# for video_dir in "$dir_path"/*; do
-#     if [ -d "$video_dir" ]; then
-#         echo "Processing video in directory: $video_dir"
-#         python demo.py --video_path "$video_dir/video.mkv" --save_dir "$video_dir"
-#         mv "$video_dir/result.json" "$video_dir/result_hands23.json"
-#     fi
-# done
-# conda deactivate
+conda activate hands23
+cd ~/robot-grasp/third_party/hands23_detector
+for video_dir in "$dir_path"/*; do
+    if [ -d "$video_dir" ]; then
+        echo "Processing video in directory: $video_dir"
+        python demo.py --video_path "$video_dir/video.mkv" --save_dir "$video_dir"
+        mv "$video_dir/result.json" "$video_dir/result_hands23.json"
+    fi
+done
+conda deactivate
 
 # Extract the clear scene, initial grasping and final grasping npy files
 conda activate main_env
@@ -39,17 +39,17 @@ done
 conda deactivate
 
 
-# # Find the 3D hands in the grasping frames
-# conda activate wilor
-# for video_dir in "$dir_path"/*; do
-#     if [ -d "$video_dir" ]; then
-#         echo "Finding 3D hand in directory: $video_dir"
-#         cd ~/robot-grasp/third_party/WiLoR
-#         python demo_rgbdk.py --npy_folder "$video_dir" --out_folder "$video_dir" --save_mesh
-#         # rm initial_scene.obj
-#     fi
-# done
-# conda deactivate
+# Find the 3D hands in the grasping frames
+conda activate wilor
+for video_dir in "$dir_path"/*; do
+    if [ -d "$video_dir" ]; then
+        echo "Finding 3D hand in directory: $video_dir"
+        cd ~/robot-grasp/third_party/WiLoR
+        python demo_rgbdk.py --npy_folder "$video_dir" --out_folder "$video_dir" --save_mesh
+        # rm initial_scene.obj
+    fi
+done
+conda deactivate
 
 # Preprocess all data to get taxpose training data
 conda activate main_env

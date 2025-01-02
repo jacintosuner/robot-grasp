@@ -90,7 +90,8 @@ def extract_frame_index(dir_path: str, frame_type: str = "clear") -> int:
 def main():
     parser = argparse.ArgumentParser(description='Extract clear and grasping frames from a directory.')
     parser.add_argument('--dir_path', type=str, required=True, help='Path to the directory containing the video, the images and the results from Detectron2.')
-    parser.add_argument('--extract_frames', nargs='+', choices=['initial', 'clear', 'initial_grasping', 'final_grasping'], help='List of frame types to extract.')
+    parser.add_argument('--extract_frames', nargs='+', choices=['initial', 'clear', 'initial_grasping', 'final_grasping'], default=[], help='List of frame types to extract.')
+    parser.add_argument('--frame_numbers', type=int, nargs='+', help='List of specific frame numbers to extract. Has to be the same length as --extract_frames.')
     args = parser.parse_args()
     dir_path = args.dir_path
 
@@ -98,12 +99,14 @@ def main():
         print(f"Error: {dir_path} is not a valid directory.")
         return
 
-    if args.extract_frames:
-        for frame_type in args.extract_frames:
-            print(f"Extracting {frame_type} scene...")
+    for i, frame_type in enumerate(args.extract_frames):
+        print(f"Extracting {frame_type} scene...")
+        if args.frame_numbers:
+            frame_idx = args.frame_numbers[i]
+        else:
             frame_idx = extract_frame_index(dir_path, frame_type)
-            save_frame_data_to_rgbdk(dir_path, frame_idx, f"{frame_type}_scene")
-        return
+        save_frame_data_to_rgbdk(dir_path, frame_idx, f"{frame_type}_scene")
+    return
     
 
 if __name__ == "__main__":

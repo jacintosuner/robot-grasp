@@ -49,7 +49,7 @@ def kabsch_numpy(P, Q):
     # RMSD
     rmsd = np.sqrt(np.sum(np.square(np.dot(p, R.T) - q)) / P.shape[0])
 
-    return R, t, rmsd
+    return R, t, centroid_P, rmsd
 
 
 def load_obj(file_path):
@@ -72,11 +72,10 @@ def depth_to_point_cloud(depth, K):
     points = np.stack((x, y, z), axis=-1).reshape(-1, 3)
     return points
 
-def transform_point_cloud(point_cloud, R, t):
-    centroid = np.mean(point_cloud, axis=0)
-    return np.dot(point_cloud - centroid, R.T) + centroid + t
+def transform_point_cloud(point_cloud, R, t, centering):
+    return np.dot(point_cloud - centering, R.T) + centering + t
 
-def visualize_hand_poses(initial_grasping_scene, final_grasping_scene, R, t):
+def visualize_hand_poses(initial_grasping_scene, final_grasping_scene, R, t, centering):
     # Create Open3D point clouds
     initial_pcd = o3d.geometry.PointCloud()
     initial_pcd.points = o3d.utility.Vector3dVector(initial_grasping_scene)
@@ -87,7 +86,7 @@ def visualize_hand_poses(initial_grasping_scene, final_grasping_scene, R, t):
 
     # Transform the initial hand pose
     transformed_initial_pcd = o3d.geometry.PointCloud()
-    transformed_initial_pcd.points = o3d.utility.Vector3dVector(transform_point_cloud(initial_grasping_scene, R, t))
+    transformed_initial_pcd.points = o3d.utility.Vector3dVector(transform_point_cloud(initial_grasping_scene, R, t, centering))
     transformed_initial_pcd.paint_uniform_color([0, 0, 1])  # Blue for transformed initial hand pose
 
     # Visualize the hand poses
@@ -105,13 +104,13 @@ def main(dir_path, object_name):
     initial_grasping_scene = load_obj(f"{dir_path}/initial_grasping_scene_0.obj")
     final_grasping_scene = load_obj(f"{dir_path}/final_grasping_scene_0.obj")
 
-    R, t, rmsd = kabsch_numpy(initial_grasping_scene, final_grasping_scene)
+    R, t, centering, rmsd = kabsch_numpy(initial_grasping_scene, final_grasping_scene)
     print("Rotation Matrix:\n", R)
     print("Translation Vector:\n", t)
     print("RMSD:\n", rmsd)
 
     ## Visualize the final hand pose and the transformed initial hand pose
-    hand_initial_pcd, hand_final_pcd, hand_transformed_initial_pcd = visualize_hand_poses(initial_grasping_scene, final_grasping_scene, R, t)
+    hand_initial_pcd, hand_final_pcd, hand_transformed_initial_pcd = visualize_hand_poses(initial_grasping_scene, final_grasping_scene, R, t, centering)
 
     # Transform the "action points" (the object point cloud) using the hand transformation
     ## Extract the segmentation mask from grounded sam results
@@ -131,26 +130,26 @@ def main(dir_path, object_name):
     
     ## Apply the transformation to the object point cloud
     object_points = point_cloud[seg_data == 1]
-    transformed_object_points = transform_point_cloud(object_points, R, t)
+    transformed_object_points = transform_point_cloud(object_points, R, t, centering)
 
-    # ## Visualize the original and transformed object point clouds
-    # ### Assign blue color to transformed object points
-    # transformed_colors = np.zeros_like(transformed_object_points)
-    # transformed_colors[:] = [0, 0, 1]  # Blue for transformed object points
-    # ### Assign colors based on segmentation mask
-    # colors = np.zeros_like(point_cloud)
-    # colors[seg_data == 0] = [0, 0, 0]  # Black for background
-    # colors[seg_data == 1] = [1, 0, 0]  # Green for object
-    # ### Create Open3D point cloud
-    # pcd = o3d.geometry.PointCloud()
-    # pcd.points = o3d.utility.Vector3dVector(point_cloud)
-    # pcd.colors = o3d.utility.Vector3dVector(colors)
-    # ### Create Open3D point cloud for transformed object points
-    # transformed_pcd = o3d.geometry.PointCloud()
-    # transformed_pcd.points = o3d.utility.Vector3dVector(transformed_object_points)
-    # transformed_pcd.colors = o3d.utility.Vector3dVector(transformed_colors)
-    # ### Visualize the original and transformed point clouds together
-    # # o3d.visualization.draw_geometries([pcd, transformed_pcd, hand_initial_pcd, hand_final_pcd, hand_transformed_initial_pcd])
+    ## Visualize the original and transformed object point clouds
+    ### Assign blue color to transformed object points
+    transformed_colors = np.zeros_like(transformed_object_points)
+    transformed_colors[:] = [0, 0, 1]  # Blue for transformed object points
+    ### Assign colors based on segmentation mask
+    colors = np.zeros_like(point_cloud)
+    colors[seg_data == 0] = [0, 0, 0]  # Black for background
+    colors[seg_data == 1] = [1, 0, 0]  # Green for object
+    ### Create Open3D point cloud
+    pcd = o3d.geometry.PointCloud()
+    pcd.points = o3d.utility.Vector3dVector(point_cloud)
+    pcd.colors = o3d.utility.Vector3dVector(colors)
+    ### Create Open3D point cloud for transformed object points
+    transformed_pcd = o3d.geometry.PointCloud()
+    transformed_pcd.points = o3d.utility.Vector3dVector(transformed_object_points)
+    transformed_pcd.colors = o3d.utility.Vector3dVector(transformed_colors)
+    ### Visualize the original and transformed point clouds together
+    o3d.visualization.draw_geometries([pcd, transformed_pcd, hand_initial_pcd, hand_final_pcd, hand_transformed_initial_pcd])
     # o3d.visualization.draw_geometries([pcd, transformed_pcd])
 
     
