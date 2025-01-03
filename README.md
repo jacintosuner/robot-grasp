@@ -1,7 +1,7 @@
 # Purpose
 This repository offers scripts and utilities mainly for the purpose of having a pipeline that can learn tasks from human demonstrations and execute them on a robot.
 ## Camera Robot Calibration
-Uses the repo [rtc_vision_toolbox](https://github.com/cmu-mfi/rtc_vision_toolbox) to perform robot camera calibration using an Aruco Marker, [Frankapy](https://github.com/jacintosuner/frankapy) to control the robot and [Pyk4a](https://github.com/etiennedub/pyk4a) to control the camera.
+Uses the repo [rtc_vision_toolbox](https://github.com/cmu-mfi/rtc_vision_toolbox) to perform robot camera calibration using an Aruco Marker, [Frankapy](https://github.com/jacintosuner/frankapy) to control the robot and [Pyk4a](https://github.com/etiennedub/pyk4a) to control the camera. Checkout all 3 repositories (and the section below) to see the installations needed.
 ```bash
 ./scripts/perform_calibration.sh
 ```
