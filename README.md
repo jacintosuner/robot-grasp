@@ -12,7 +12,7 @@ From an rgbd video, generate the "support" or "reference" image and mask necessa
 ```
 ## Run Grasping predictor and executor pipeline
 This pipeline is given by the following steps:
-![alt text](grasping_predictor_and_executor_pipeline.png)
+<img src="grasping_predictor_and_executor_pipeline.png" alt="Grasping Predictor and Executor Pipeline">
 ```bash
 ./grasping_predictor_and_executor.sh --mask_reference_path ~/robot-grasp/data/mask_references/reference_20241122_153952 --object_name mug
 ```
