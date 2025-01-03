@@ -1,21 +1,22 @@
 #!/bin/bash
 
-# Example usage: ./pipeline_mask_references.sh
+# Example usage: ./pipeline_mask_references.sh --base_dir 
 
 timestamp=$(date +"%Y%m%d_%H%M%S")
-output_dir=~/robot-grasp/data/mask_references/reference_$timestamp
+default_output_dir=~/robot-grasp/data/mask_references/reference_$timestamp
+output_dir=$default_output_dir
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --base_dir) output_dir="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 mkdir -p $output_dir
 
 source ~/miniconda3/etc/profile.d/conda.sh
-
-# OLD:
-# conda activate main_env
-# cd ~/robot-grasp/scripts/utils
-# python capture_rgbdk.py --output_path $output_dir --name clear_scene
-# echo Sleeping for 4 seconds
-# sleep 4
-# echo Done sleeping
-# python capture_rgbdk.py --output_path $output_dir/hand_frames --name hand_grasping
 
 
 # Capture the video

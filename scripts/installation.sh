@@ -10,7 +10,7 @@
 # conda create --name main_env python=3.10.12
 # conda activate main_env
 # pip install git+https://github.com/lucasb-eyer/pydensecrf.git
-# pip3 install torch torchvision torchaudio
+# pip install torch torchvision torchaudio
 # pip install -e $(pwd)/third_party/Grounded-SAM-2
 # pip install -r $(pwd)/third_party/Grounded-SAM-2/grounding_dino/requirements.txt
 # pip install --no-build-isolation -e $(pwd)/third_party/Grounded-SAM-2/grounding_dino
@@ -22,18 +22,6 @@
 
 
 # conda deactivate
-
-# # AnyGrasp setup
-# conda env create -f  $(pwd)/configs/conda_envs/anygrasp_env.yml
-# cd $(pwd)/third_party/anygrasp_sdk/pointnet2
-# conda activate anygrasp_env
-## MinkowskiEngine installation
-# sudo apt install build-essential python3-dev libopenblas-dev
-# pip install torch ninja
-# pip install -U git+https://github.com/NVIDIA/MinkowskiEngine --no-deps
-echo $CUDA_HOME
-python setup.py install
-
 
 # # Contact Graspnet setup
 # conda env remove --name contact_graspnet_env

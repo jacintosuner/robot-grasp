@@ -2,9 +2,8 @@
 
 # Examples:
 # cd scripts
-# ./pipeline_contact_graspnet.sh --rgbdk_path ~/robot-grasp/data/rgbdks/rgbdk.npy --mask_reference_path ~/robot-grasp/data/mask_references/mug_reference
-# ./pipeline_contact_graspnet.sh --mask_reference_path ~/robot-grasp/data/mask_references/reference_20241122_153952 --object_name mug
-# ./pipeline_contact_graspnet.sh --mask_reference_path ~/robot-grasp/data/mask_references/duck_reference_20241218 --object_name yellow-duck
+# ./grasping_predictor_and_executor.sh --mask_reference_path ~/robot-grasp/data/mask_references/reference_20241122_153952 --object_name mug
+# ./grasping_predictor_and_executor.sh --mask_reference_path ~/robot-grasp/data/mask_references/duck_reference_20241218 --object_name yellow-duck
 
 # Creating folder with results
 echo "Creating folder with pipeline inputs and results..."
