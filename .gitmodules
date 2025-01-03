@@ -9,4 +9,18 @@
 	url = https://github.com/jacintosuner/Grounded-SAM-2.git
 [submodule "third_party/frankapy"]
 	path = third_party/frankapy
-	url = https://github.com/jacintosuner/frankapy.git
+	url = https://github.com/jacintosuner/frankapy
+[submodule "third_party/rtc_vision_toolbox"]
+	path = third_party/rtc_vision_toolbox
+	url = https://github.com/jacintosuner/rtc_vision_toolbox.git
+[submodule "third_party/WiLoR"]
+	path = third_party/WiLoR
+[submodule "third_party/hands23_detector"]
+	path = third_party/hands23_detector
+	url = https://github.com/jacintosuner/hands23_detector
+[submodule "third_party/taxposeD"]
+	path = third_party/taxposeD
+	url = https://github.com/himty/taxposeD.git
+[submodule "third_party/taxpose"]
+	path = third_party/taxpose
+	url = https://github.com/r-pad/taxpose.git

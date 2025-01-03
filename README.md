@@ -1,5 +1,89 @@
+# Purpose
+This repository offers scripts and utilities mainly for the purpose of having a pipeline that can learn tasks from human demonstrations and execute them on a robot.
+## Camera Robot Calibration
+Uses the repo [rtc_vision_toolbox](https://github.com/cmu-mfi/rtc_vision_toolbox) to perform robot camera calibration using an Aruco Marker, [Frankapy](https://github.com/jacintosuner/frankapy) to control the robot and [Pyk4a](https://github.com/etiennedub/pyk4a) to control the camera. Checkout all 3 repositories (and the section below) to see the installations needed.
+```bash
+./scripts/perform_calibration.sh
+```
+## Automatic Mask References for [AffCorrs](https://github.com/RPL-CS-UCL/UCL-AffCorrs)
+From an rgbd video, generate the "support" or "reference" image and mask necessary to run AffCorrs model.
+```bash
+./scripts/generate_mask_references.sh --base_dir data
+```
+## Run Grasping predictor and executor pipeline
+This pipeline is given by the following steps:
+![alt text](grasping_predictor_and_executor_pipeline.png)
+```bash
+./grasping_predictor_and_executor.sh --mask_reference_path ~/robot-grasp/data/mask_references/reference_20241122_153952 --object_name mug
+```
+## Capturing video demos
+```bash
+./scripts/capture_video_demos.sh --output_directory ~/robot-grasp/data/demos/videos --num_videos 15 --duration 6
+```
+## Turning video demos into TAXPOSED training data
+```bash
+./scripts/pipeline_process_demos_for_taxposed.sh --dir_path ~/robot-grasp/data/demos/demos_20241230_173916 --object_name mug
+```
+## Other
+Other scripts and utilities are used for a wide variety of things, including capturing image and video using Pyk4a, resetting the franka arm position, preprocessing for the models used (contact graspnet, taxposed,...), point cloud visualizers,...
+
+# Installation
+## Prerequisites
+### Frankarm / Frankapy connection and installation
+In order to setup frankarm connection:
+* Connect the ethernet cable to your desk, and change IPv4 Method to "Shared to other computers".
+* Follow the instructions from frankapy's repo section "Configuring the network with the Control PC", including the IP Address setup for communication through a router (for some reason, setting both network configurations to Automatic doesn't work).
+
+
+Follow installation steps for ROS1: https://robostack.github.io/GettingStarted.html#__tabbed_1_1
+What worked for us:
+``` bash
+mamba create -n ros_noetic python=3.8 ros-noetic-ros-base ros-noetic-franka-gripper -c robostack -c conda-forge
+```
+
+Install catkin tools: `sudo pip3 install -U catkin_tools`
+
+
+For more information, checkout this [Frankapy fork](https://github.com/jacintosuner/frankapy).
+
+
+### Install k4a (for Ubuntu 22.04)
+```bash
+sudo apt-add-repository -y -n 'deb http://archive.ubuntu.com/ubuntu focal main'
+sudo apt-add-repository -y 'deb http://archive.ubuntu.com/ubuntu focal universe'
+sudo apt-get install -y libsoundio1
+sudo apt-add-repository -r -y -n 'deb http://archive.ubuntu.com/ubuntu focal universe'
+sudo apt-add-repository -r -y 'deb http://archive.ubuntu.com/ubuntu focal main'
+
+wget "https://packages.microsoft.com/ubuntu/18.04/prod/pool/main/k/k4a-tools/k4a-tools_1.4.1_amd64.deb"
+wget "https://packages.microsoft.com/ubuntu/18.04/prod/pool/main/libk/libk4a1.4/libk4a1.4_1.4.1_amd64.deb"
+wget "https://packages.microsoft.com/ubuntu/18.04/prod/pool/main/libk/libk4a1.4-dev/libk4a1.4-dev_1.4.1_amd64.deb"
+
+
+sudo dpkg -i libk4a1.4-dev_1.4.1_amd64.deb
+sudo dpkg -i libk4a1.4_1.4.1_amd64.deb
+sudo dpkg -i k4a-tools_1.4.1_amd64.deb
+
+git clone https://github.com/microsoft/Azure-Kinect-Sensor-SDK.git
+cd Azure-Kinect-Sensor-SDK
+sudo cp scripts/99-k4a.rules /etc/udev/rules.d/
+
+# disconnect and connect the camera again
+k4aviewer
+```
+
+## Final Build (needs to be tested out from scratch)
+Run `scripts/installation.sh`
+For Anygrasp:
+* Follow the steps provided in its github repository for downloading pointnet.
+For Contact Graspnet:
+* If pip issues arise during the creation of the conda environment contact_graspnet_env, try unsetting the variable PYTHONPATH: `unset PYTHONPATH`
+
+
+## Old Repo
 [Old repo](https://github.com/jacintosuner/old-robot-grasp)
 
+## Repo from which this one comes from
 This repo follows a template for a Python Machine Learning project with the following features:
 
 * [Weights and Biases](wandb.ai) support, for experiment tracking and visualization

@@ -1,1 +1,0 @@
-echo "First parameter: $1"
