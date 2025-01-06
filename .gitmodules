@@ -24,3 +24,6 @@
 [submodule "third_party/taxpose"]
 	path = third_party/taxpose
 	url = https://github.com/r-pad/taxpose.git
+[submodule "third_party/video_to_taxposed"]
+	path = third_party/video_to_taxposed
+	url = https://github.com/jacintosuner/video_to_taxposed.git
