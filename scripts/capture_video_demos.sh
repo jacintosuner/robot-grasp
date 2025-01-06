@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Example usage: ./capture_video_demos.sh --num_videos 15 --duration 6
 # Example usage: ./capture_video_demos.sh --output_directory ~/robot-grasp/data/demos/videos --num_videos 15 --duration 6
 
 # Parse command line arguments
@@ -16,7 +17,7 @@ done
 # Set default output directory if not provided
 if [ -z "$OUTPUT_DIR" ]; then
     timestamp=$(date +"%Y%m%d_%H%M%S")
-    OUTPUT_DIR=~/robot-grasp/data/demos_$timestamp/videos
+    OUTPUT_DIR=~/robot-grasp/data/demos_$timestamp/
 fi
 
 # Set default number of videos if not provided
