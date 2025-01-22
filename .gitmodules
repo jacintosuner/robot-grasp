@@ -15,6 +15,7 @@
 	url = https://github.com/jacintosuner/rtc_vision_toolbox.git
 [submodule "third_party/WiLoR"]
 	path = third_party/WiLoR
+	url = https://github.com/jacintosuner/WiLoR
 [submodule "third_party/hands23_detector"]
 	path = third_party/hands23_detector
 	url = https://github.com/jacintosuner/hands23_detector
