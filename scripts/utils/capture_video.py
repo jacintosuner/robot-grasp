@@ -44,10 +44,22 @@ class VideoCapture:
                 'ffmpeg', '-i', str(self.output_path), '-map', '0:1',
                 '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
                 '-vf', 'scale=640:576,format=gray,eq=brightness=0.1',
-                '-crf', '23', '-preset', 'medium', str(mp4_path)
+                '-crf', '23', '-preset', 'medium', str(mp4_path),
+                '-loglevel', 'error'
             ], check=True)
         else:
             raise ValueError(f"Invalid stream type: {stream_type}. Choose 'color' or 'depth'.")
+        
+
+    def draw_frames_in_video(self):
+        output_stem = self.output_path.stem
+        output_path = self.output_path.with_name(f'{output_stem}_frames.mkv')
+        subprocess.run([
+            'ffmpeg', '-i', str(self.output_path),
+            '-vf', "drawtext=text='%{n}': x=10: y=10: fontsize=24: fontcolor=white: box=1: boxcolor=black@0.5",
+            '-c:a', 'copy',
+            str(output_path)
+        ], check=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Capture video from a device.")
@@ -58,7 +70,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     config = Config(camera_fps=FPS.FPS_30 if args.fps == 30 else FPS.FPS_15 if args.fps == 15 else FPS.FPS_5)  # Initialize with appropriate configuration
-    device = PyK4A(config, device_id=1)
+    device = PyK4A(config, device_id=0)
     device.start()
 
     video_capture = VideoCapture(args.output_path, config, device)

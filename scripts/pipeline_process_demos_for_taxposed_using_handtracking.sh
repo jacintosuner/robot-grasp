@@ -79,7 +79,7 @@ cd ~/robot-grasp/scripts/utils
 for video_dir in "$dir_path"/*; do
     if [ -d "$video_dir" ]; then
         echo "Preprocessing data in directory: $video_dir"
-        python taxposed_input_processing.py --dir_path "$video_dir" --object_name "$object_name"
+        python taxposed_train_data_processing.py --dir_path "$video_dir" --object_name "$object_name"
     fi
 done
 

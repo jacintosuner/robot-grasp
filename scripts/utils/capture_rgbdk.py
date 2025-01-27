@@ -10,7 +10,7 @@ from pyk4a.calibration import CalibrationType
 # python3 capture_rgbdk.py --output_path ../../data/rgbdks/ --to_images
 # rsync -r --progress ~/robot-grasp/data/rgbdks/rgbdk.npy jacinto@ham1.pc.cs.cmu.edu:/home/jacinto/robot-grasp/data/rgbdks
 
-def capture_rgbd(output_path, to_images, name):
+def capture_rgbd(output_path, to_images, name, device_id=0):
     # Create a output_path if it doesn't exist
     if not os.path.exists(output_path):
         os.makedirs(output_path)
@@ -19,8 +19,9 @@ def capture_rgbd(output_path, to_images, name):
     device_count = k4a_module.device_get_installed_count()
     for device_id in range(device_count):
         print(f"Device ID: {device_id}")
+    print("Using device: ", device_id)
 
-    k4a = PyK4A(device_id=0)  # Adjust config as needed
+    k4a = PyK4A(device_id=device_id)  # Adjust config as needed
     k4a.start()
 
     try:
@@ -71,6 +72,7 @@ if __name__ == "__main__":
     parser.add_argument('--output_path', type=str, help='Directory to save RGBD data')
     parser.add_argument('--to_images', action='store_true', help='Save RGB and Depth data as a single .npy file')
     parser.add_argument('--name', type=str, default='rgbdk', help='Base name for the saved files')
+    parser.add_argument('--device_id', type=int, default=0, help='Device ID of the Azure Kinect camera')
 
     args = parser.parse_args()
-    capture_rgbd(args.output_path, args.to_images, args.name)
+    capture_rgbd(args.output_path, args.to_images, args.name, args.device_id)

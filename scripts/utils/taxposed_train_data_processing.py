@@ -7,7 +7,7 @@ from pycocotools import mask as maskUtils
 import open3d as o3d
 
 
-# Example usage: python taxposed_input_processing.py --dir_path ~/robot-grasp/data/demos/demos_20241230_173916/13 --object_name mug
+# Example usage: python taxposed_train_data_processing.py --dir_path ~/robot-grasp/data/demos/demos_20241230_173916/13 --object_name mug
 
 
 def kabsch_numpy(P, Q):

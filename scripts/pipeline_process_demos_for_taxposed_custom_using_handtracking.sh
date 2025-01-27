@@ -66,7 +66,7 @@ fi
 cd ~/robot-grasp/scripts/utils
 if [ -d "$dir_path" ]; then
     echo "Preprocessing data in directory: $dir_path"
-    python taxposed_input_processing.py --dir_path "$dir_path" --object_name "$object_name"
+    python taxposed_train_data_processing.py --dir_path "$dir_path" --object_name "$object_name"
 fi
 
 # Put all the processed taxpose data into a single folder

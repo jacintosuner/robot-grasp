@@ -2,7 +2,7 @@
 
 # Examples:
 # cd scripts
-# ./grasping_predictor_and_executor.sh --mask_reference_path ~/robot-grasp/data/mask_references/reference_20241122_153952 --object_name mug
+# ./grasping_predictor_and_executor.sh --mask_reference_path ~/robot-grasp/data/mask_references/mug_20250113 --object_name mug
 # ./grasping_predictor_and_executor.sh --mask_reference_path ~/robot-grasp/data/mask_references/duck_reference_20241218 --object_name yellow-duck
 
 # Creating folder with results
@@ -43,7 +43,7 @@ fi
 if [ -z "$rgbdk_input_path" ]; then
   echo "No --rgbdk_path provided. Capturing RGBDK data."
   cd ~/robot-grasp/scripts
-  python3 utils/capture_rgbdk.py --output_path $output_directory
+  python3 utils/capture_rgbdk.py --output_path $output_directory --device_id 1
 else
   echo "Using provided --rgbdk_path."
   cp $rgbdk_input_path $output_directory/rgbdk.npy
@@ -86,23 +86,42 @@ cd ~/robot-grasp/scripts/utils
 python3 zero_out_features.py --affordance_path $output_directory/affordance_mask.npy --zero_out_features $output_directory/grounded_sam_seg_robot.json --output_dir $output_directory
 
 
-# # Prepare input for Contact Graspnet
+# Prepare input for Contact Graspnet
 echo "############################# Preparing input for Contact Graspnet..."
 cd ~/robot-grasp/scripts
 python3 utils/contact_graspnet_input_preprocessing.py --data_dir $output_directory --object_name $object_name
 
 conda deactivate
 
-# # Run Contact Graspnet
+# Run Contact Graspnet
 echo "############################# Running Contact Graspnet..."
 conda activate contact_graspnet_env
 cd ~/robot-grasp/third_party/contact_graspnet
 python3 contact_graspnet/inference.py --np_path $output_directory/contact_graspnet_input.npy --filter_grasps --results_path $output_directory --ckpt_dir ~/robot-grasp/third_party/contact_graspnet/checkpoints/scene_test_2048_bs3_hor_sigma_0025
 conda deactivate
 
-# # Select and execute the grasp on the robot
+# TAXPOSED
+# Prepare input for TAXPOSED
+# Predict TAXPOSED transform
+echo "############################# Preparing input for TAXPOSED..."
+conda activate taxposed
+cd ~/robot-grasp/third_party/taxposeD
+python3 taxposed_inference_wrapper.py --input_path $output_directory/contact_graspnet_input.npy --output_dir $output_directory --gsam2_pred_path $output_directory/grounded_sam_seg_${object_name}.json --cfg plan.yaml
+conda deactivate
+
+# Visualize the results
+conda activate main_env
+cd ~/robot-grasp/scripts/utils
+python3 visualize_taxposed_prediction.py --taxposed_prediction $output_directory/taxposed_prediction.npy --point_cloud $output_directory/point_cloud.npy --segmented_point_cloud $output_directory/segmented_point_cloud.npy
+conda deactivate
+
+exit 0
+
+# Run Robot
+## Select and execute the grasp on the robot
 conda activate ros_noetic
 cd ~/robot-grasp/third_party/frankapy
 bash ./bash_scripts/start_control_pc.sh -i iam-dopey
 source catkin_ws/devel/setup.bash
-python ~/robot-grasp/scripts/utils/execute_contact_graspnet_grasps.py --grasps_file_path $output_directory/contact_graspnet_results.npz
+python ~/robot-grasp/scripts/utils/execute_contact_graspnet_grasps.py --grasps_file_path $output_directory/contact_graspnet_results.npz --taxposed_prediction $output_directory/taxposed_prediction.npy
+
