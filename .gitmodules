@@ -21,7 +21,7 @@
 	url = https://github.com/jacintosuner/hands23_detector
 [submodule "third_party/taxposeD"]
 	path = third_party/taxposeD
-	url = https://github.com/himty/taxposeD.git
+	url = https://github.com/jacintosuner/taxposeD.git
 [submodule "third_party/taxpose"]
 	path = third_party/taxpose
 	url = https://github.com/r-pad/taxpose.git
