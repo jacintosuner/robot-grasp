@@ -6,14 +6,16 @@ import argparse
 # Example usage: python visualize_taxposed_prediction.py --taxposed_prediction /home/jacinto/robot-grasp/data/contact_graspnet_pipeline_results_for_red_mug/taxposed_prediction.npy --point_cloud /home/jacinto/robot-grasp/data/contact_graspnet_pipeline_results_for_red_mug/point_cloud.npy --segmented_point_cloud /home/jacinto/robot-grasp/data/contact_graspnet_pipeline_results_for_red_mug/segmented_point_cloud.npy
 # Example usage: python visualize_taxposed_prediction.py --taxposed_prediction /home/jacinto/robot-grasp/data/contact_graspnet_pipeline_results_20250113_192755/taxposed_prediction.npy --point_cloud /home/jacinto/robot-grasp/data/contact_graspnet_pipeline_results_20250113_192755/point_cloud.npy --segmented_point_cloud /home/jacinto/robot-grasp/data/contact_graspnet_pipeline_results_20250113_192755/segmented_point_cloud.npy
 
-def visualize(taxposed_prediction, point_cloud, segmented_point_cloud):
-    # Load the data from the npy files
+def prepare_data(taxposed_prediction, point_cloud, segmented_point_cloud):
     taxposed_prediction = np.load(taxposed_prediction)
     point_cloud = np.load(point_cloud)
     segmented_point_cloud = np.load(segmented_point_cloud)
-
     # Take the first transformation matrix
     transformation_matrix = taxposed_prediction[0]
+    
+    return transformation_matrix, point_cloud, segmented_point_cloud
+
+def visualize(transformation_matrix, point_cloud, segmented_point_cloud):
 
     # Create an Open3D point cloud object
     pcd = o3d.geometry.PointCloud()
@@ -54,6 +56,9 @@ if __name__ == '__main__':
     cfgs = parser.parse_args()
 
     # visualize_rgbdk(cfgs.file_paths, EEF_POSE)
-    visualize(cfgs.taxposed_prediction,
-              cfgs.point_cloud,
-              cfgs.segmented_point_cloud)
+    taxposed_prediction, point_cloud, segmented_point_cloud = prepare_data(cfgs.taxposed_prediction,
+                                                                           cfgs.point_cloud,
+                                                                           cfgs.segmented_point_cloud)
+    visualize(taxposed_prediction,
+              point_cloud,
+              segmented_point_cloud)

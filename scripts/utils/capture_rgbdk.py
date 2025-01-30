@@ -28,9 +28,9 @@ def capture_rgbd(output_path, to_images, name, device_id=0):
         # Capture a single frame
         capture = k4a.get_capture()
 
-        if capture.color is not None and capture.depth is not None:
+        if capture.color is not None and capture.transformed_depth is not None:
             # Convert depth to millimeters and ensure it's uint16
-            depth_image = capture.depth.astype(np.uint16)  # Keep depth in mm
+            depth_image = capture.transformed_depth.astype(np.uint16)  # Keep depth in mm
             
             if to_images:
                 # Save RGB and Depth images as PNG files

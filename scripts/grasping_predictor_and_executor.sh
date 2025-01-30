@@ -106,14 +106,14 @@ conda deactivate
 echo "############################# Preparing input for TAXPOSED..."
 conda activate taxposed
 cd ~/robot-grasp/third_party/taxposeD
-python3 taxposed_inference_wrapper.py --input_path $output_directory/contact_graspnet_input.npy --output_dir $output_directory --gsam2_pred_path $output_directory/grounded_sam_seg_${object_name}.json --cfg plan.yaml
+python3 taxposed_inference_wrapper.py --input_path $output_directory/contact_graspnet_input.npy --output_dir $output_directory --gsam2_pred_path $output_directory/grounded_sam_seg_${object_name}.json --cfg plan.yaml --debug
 conda deactivate
 
 # Visualize the results
-conda activate main_env
-cd ~/robot-grasp/scripts/utils
-python3 visualize_taxposed_prediction.py --taxposed_prediction $output_directory/taxposed_prediction.npy --point_cloud $output_directory/point_cloud.npy --segmented_point_cloud $output_directory/segmented_point_cloud.npy
-conda deactivate
+# conda activate main_env
+# cd ~/robot-grasp/scripts/utils
+# python3 visualize_taxposed_prediction.py --taxposed_prediction $output_directory/taxposed_prediction.npy --point_cloud $output_directory/point_cloud.npy --segmented_point_cloud $output_directory/segmented_point_cloud.npy
+# conda deactivate
 
 exit 0
 
