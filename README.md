@@ -22,14 +22,15 @@ This pipeline is given by the following steps:
 ```
 ## Turning video demos into TAXPOSED training data
 ```bash
-./scripts/pipeline_process_demos_for_taxposed.sh --dir_path ~/robot-grasp/data/demos/demos_20241230_173916 --object_name mug
+./third_party/video_to_taxposed/video_to_taxposed.sh --input_dir ~/robot-grasp/data/demos/demos_20241230_173916 --output_dir ~/robot-grasp/data/taxposed_for_demos_20241230_173916 --object_names "mug." --debug
+
 ```
 ## Other
 Other scripts and utilities are used for a wide variety of things, including capturing image and video using Pyk4a, resetting the franka arm position, preprocessing for the models used (contact graspnet, taxposed,...), point cloud visualizers,...
 
 # Installation
 ## Prerequisites
-### Frankarm / Frankapy connection and installation
+### Frankarm / Frankapy connection and installation (in our case, for Ubuntu 22.04)
 In order to setup frankarm connection:
 * Connect the ethernet cable to your desk, and change IPv4 Method to "Shared to other computers".
 * Follow the instructions from frankapy's repo section "Configuring the network with the Control PC", including the IP Address setup for communication through a router (for some reason, setting both network configurations to Automatic doesn't work).

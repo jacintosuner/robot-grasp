@@ -75,6 +75,7 @@ def extract_frame_index(dir_path: str, frame_type: str = "clear") -> int:
         indexes = [i for i, item in enumerate(data['images']) if any(pred.get("obj_touch") == "neither_,_held" for pred in item.get("predictions", []))]
         if not indexes:
             raise ValueError("No frames with the specified condition found.")
+        # return 17
         return indexes[int(len(indexes) * 0.05)]
 
     elif frame_type == "final_grasping":

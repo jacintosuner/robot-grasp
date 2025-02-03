@@ -67,10 +67,11 @@ if __name__ == "__main__":
     parser.add_argument("--output_path", type=str, required=True, help="Path to save the output video.")
     parser.add_argument("--extra_export_stream_type", type=str, choices=[None, 'color', 'depth'], default='color', help="Stream type to export (color or depth).")
     parser.add_argument("--fps", type=int, choices=[5, 15, 30], default=15, help="Frames per second for the video capture.")
+    parser.add_argument("--device_id", type=int, default=0, help="ID of the device to use.")
     args = parser.parse_args()
 
     config = Config(camera_fps=FPS.FPS_30 if args.fps == 30 else FPS.FPS_15 if args.fps == 15 else FPS.FPS_5)  # Initialize with appropriate configuration
-    device = PyK4A(config, device_id=0)
+    device = PyK4A(config, device_id=args.device_id)
     device.start()
 
     video_capture = VideoCapture(args.output_path, config, device)

@@ -115,7 +115,6 @@ conda deactivate
 # python3 visualize_taxposed_prediction.py --taxposed_prediction $output_directory/taxposed_prediction.npy --point_cloud $output_directory/point_cloud.npy --segmented_point_cloud $output_directory/segmented_point_cloud.npy
 # conda deactivate
 
-exit 0
 
 # Run Robot
 ## Select and execute the grasp on the robot
