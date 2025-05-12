@@ -69,7 +69,7 @@ def extract_frame_index(dir_path: str, frame_type: str = "clear") -> int:
     
     elif frame_type == "clear":
         indexes = [i for i, item in enumerate(data['images']) if not item.get("predictions")]
-        return indexes[-1]
+        return indexes[0]
     
     elif frame_type == "initial_grasping":
         indexes = [i for i, item in enumerate(data['images']) if any(pred.get("obj_touch") == "neither_,_held" for pred in item.get("predictions", []))]
